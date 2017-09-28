@@ -1,0 +1,35 @@
+[
+	{
+		"name": "Jonah Kirkland",
+		"form": 9,
+		"bet": 232000,
+		"lastTransfer": 1600,
+		"url": "http://sokker.org/transfers_player/ID_human/35413812",
+		"age": 21,
+		"endurance": 9,
+		"quickness": 10,
+		"technique": 6,
+		"passing": 10,
+		"keeper": 1,
+		"defend": 9,
+		"middle": 4,
+		"offence": 3
+	},
+	{
+		"name": "Erich Koit",
+		"form": 12,
+		"bet": 34000,
+		"url": "http://sokker.org/player/PID/35873523",
+		"age": 24,
+		"lastTransfer": 0,
+		"endurance": 4,
+		"quickness": 8,
+		"technique": 7,
+		"passing": 4,
+		"keeper": 0,
+		"defend": 6,
+		"middle": 3,
+		"offence": 9
+	}
+]
+

@@ -1,0 +1,38 @@
+{
+	"scripts": {
+		"start": "webpack --watch & babel-node server/server.js"
+	},
+	"dependencies": {
+		"babel": "^6.23.0",
+		"babel-core": "^6.26.0",
+		"babel-loader": "^7.1.1",
+		"babel-plugin-transform-decorators-legacy": "^1.3.4",
+		"babel-preset-es2015": "^6.24.1",
+		"babel-preset-react": "^6.24.1",
+		"babel-preset-stage-0": "^6.24.1",
+		"body-parser": "^1.17.2",
+		"brain": "^0.7.0",
+		"cheerio": "^1.0.0-rc.2",
+		"express": "^4.15.4",
+		"frisby": "^2.0.5",
+		"html-to-json": "^0.6.0",
+		"lodash": "^4.17.4",
+		"mobx": "^3.2.2",
+		"moment": "^2.18.1",
+		"mongo-express": "^0.42.2",
+		"mongodb": "^2.2.31",
+		"morgan": "^1.8.2",
+		"net": "^1.0.2",
+		"react": "next",
+		"react-dom": "next",
+		"react-transmit": "^3.2.0",
+		"request": "^2.81.0",
+		"serve-favicon": "^2.4.3",
+		"webpack": "^3.5.5",
+		"webpack-dev-server": "^2.7.1",
+		"webpack-node-externals": "^1.6.0"
+	},
+	"devDependencies": {
+		"json-loader": "^0.5.7"
+	}
+}
