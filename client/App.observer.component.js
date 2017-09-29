@@ -51,7 +51,7 @@ class App extends React.Component {
 			}}>
 				<div style={{
 					width: 1000,
-					backgroundColor: 'whitesmoke',
+					backgroundColor: 'lightslategrey',
 					margin: '0 auto',
 					padding: 20
 				}}>

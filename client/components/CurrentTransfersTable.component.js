@@ -13,6 +13,8 @@ class CurrentTransfersTable extends React.Component {
 
 	@computed get trainPlayers() { return playersModel.players.train; };
 
+	@computed get formattedTrainPlayers() { return playersModel.players.formattedTrain; };
+
 	@computed get currentTransfers() { return playersModel.players.currentTransfers; };
 
 
@@ -24,12 +26,8 @@ class CurrentTransfersTable extends React.Component {
 			<div>
 				{ _.map(this.currentTransfers.value, (player, i)=> {
 
-					let netPlayer = {};
-					_.forEach(player, (skill, skillName)=> {
-						if(skillName === 'name') return;
-						netPlayer[skillName] = skill / 100;
-					});
-					const quality = Math.round(this.NET.run(netPlayer).quality * 10);
+					const formattedPlayer = this.formattedTrainPlayers.value[player.name];
+					const quality = Math.round(this.NET.run(formattedPlayer).quality * 10);
 
 					return (
 						<div key={i} style={{
@@ -44,7 +42,7 @@ class CurrentTransfersTable extends React.Component {
 									return (
 										<tr key={ index } style={{
 											height: 45,
-											backgroundColor: index % 2 ? 'white' : 'transparent'
+											backgroundColor: index % 2 ? 'whitesmoke' : 'lightgray'
 										}}>
 											<td style={{
 												width: '25%',
@@ -78,6 +76,7 @@ class CurrentTransfersTable extends React.Component {
 
 							<div style={{
 								padding: 10,
+								backgroundColor: 'lightcoral',
 								borderTop: '1px solid gray'
 							}}>
 								<p>quality: { quality }</p>
