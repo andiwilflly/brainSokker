@@ -14,4 +14,4 @@ function learnSavePlayerRoute(DB, req, res) {
 }
 
 
-export default learnSavePlayerRoute;
+module.exports = learnSavePlayerRoute;

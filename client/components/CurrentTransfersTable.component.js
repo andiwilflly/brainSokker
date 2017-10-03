@@ -76,7 +76,7 @@ class CurrentTransfersTable extends React.Component {
 
 							<div style={{
 								padding: 10,
-								backgroundColor: 'lightcoral',
+								backgroundColor: 'lightblue',
 								borderTop: '1px solid gray'
 							}}>
 								<p>quality: { quality }</p>

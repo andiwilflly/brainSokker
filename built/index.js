@@ -61913,6 +61913,10 @@ var _CurrentTransfersTable = __webpack_require__(276);
 
 var _CurrentTransfersTable2 = _interopRequireDefault(_CurrentTransfersTable);
 
+var _LearnedPlayersTable = __webpack_require__(481);
+
+var _LearnedPlayersTable2 = _interopRequireDefault(_LearnedPlayersTable);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61954,9 +61958,24 @@ var App = (0, _mobxReact.observer)(_class = (_class2 = function (_React$Componen
 	_inherits(App, _React$Component);
 
 	function App() {
+		var _ref;
+
+		var _temp, _this, _ret;
+
 		_classCallCheck(this, App);
 
-		return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
+
+		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.renderRouter = function () {
+			switch (window.location.pathname) {
+				case '/learnedPlayers':
+					return React.createElement(_LearnedPlayersTable2.default, null);
+				default:
+					return React.createElement(_CurrentTransfersTable2.default, null);
+			}
+		}, _temp), _possibleConstructorReturn(_this, _ret);
 	}
 
 	_createClass(App, [{
@@ -62011,7 +62030,18 @@ var App = (0, _mobxReact.observer)(_class = (_class2 = function (_React$Componen
 						null,
 						'Brain sokker predictor'
 					),
-					React.createElement(_CurrentTransfersTable2.default, null)
+					React.createElement(
+						'a',
+						{ href: '/' },
+						'home'
+					),
+					React.createElement('br', null),
+					React.createElement(
+						'a',
+						{ href: '/learnedPlayers' },
+						'learnedPlayers'
+					),
+					this.renderRouter()
 				)
 			);
 		}
@@ -63615,7 +63645,7 @@ var CurrentTransfersTable = (0, _mobxReact.observer)(_class = (_class2 = functio
 							'div',
 							{ style: {
 									padding: 10,
-									backgroundColor: 'lightcoral',
+									backgroundColor: 'lightblue',
 									borderTop: '1px solid gray'
 								} },
 							React.createElement(
@@ -68987,6 +69017,122 @@ module.exports = function (regExp, replace) {
   };
 };
 
+
+/***/ }),
+/* 481 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(React) {
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _class, _desc, _value, _class2; // MobX
+
+// Models
+
+
+var _mobxReact = __webpack_require__(151);
+
+var _mobx = __webpack_require__(66);
+
+var _net = __webpack_require__(152);
+
+var _net2 = _interopRequireDefault(_net);
+
+var _players = __webpack_require__(157);
+
+var _players2 = _interopRequireDefault(_players);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+	var desc = {};
+	Object['ke' + 'ys'](descriptor).forEach(function (key) {
+		desc[key] = descriptor[key];
+	});
+	desc.enumerable = !!desc.enumerable;
+	desc.configurable = !!desc.configurable;
+
+	if ('value' in desc || desc.initializer) {
+		desc.writable = true;
+	}
+
+	desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+		return decorator(target, property, desc) || desc;
+	}, desc);
+
+	if (context && desc.initializer !== void 0) {
+		desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+		desc.initializer = undefined;
+	}
+
+	if (desc.initializer === void 0) {
+		Object['define' + 'Property'](target, property, desc);
+		desc = null;
+	}
+
+	return desc;
+}
+
+var LearnedPlayersTable = (0, _mobxReact.observer)(_class = (_class2 = function (_React$Component) {
+	_inherits(LearnedPlayersTable, _React$Component);
+
+	function LearnedPlayersTable() {
+		_classCallCheck(this, LearnedPlayersTable);
+
+		return _possibleConstructorReturn(this, (LearnedPlayersTable.__proto__ || Object.getPrototypeOf(LearnedPlayersTable)).apply(this, arguments));
+	}
+
+	_createClass(LearnedPlayersTable, [{
+		key: 'render',
+		value: function render() {
+			if (this.trainPlayers.status === 'pending') return React.createElement(
+				'h4',
+				null,
+				'Loading trainPlayers...'
+			);
+
+			console.log(this.trainPlayers, 42);
+
+			return React.createElement(
+				'div',
+				null,
+				'Learned Table'
+			);
+		}
+	}, {
+		key: 'NET',
+		get: function get() {
+			return _net2.default.NET;
+		}
+	}, {
+		key: 'trainPlayers',
+		get: function get() {
+			return _players2.default.players.train;
+		}
+	}, {
+		key: 'formattedTrainPlayers',
+		get: function get() {
+			return _players2.default.players.formattedTrain;
+		}
+	}]);
+
+	return LearnedPlayersTable;
+}(React.Component), (_applyDecoratedDescriptor(_class2.prototype, 'NET', [_mobx.computed], Object.getOwnPropertyDescriptor(_class2.prototype, 'NET'), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, 'trainPlayers', [_mobx.computed], Object.getOwnPropertyDescriptor(_class2.prototype, 'trainPlayers'), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, 'formattedTrainPlayers', [_mobx.computed], Object.getOwnPropertyDescriptor(_class2.prototype, 'formattedTrainPlayers'), _class2.prototype)), _class2)) || _class;
+
+exports.default = LearnedPlayersTable;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(55)))
 
 /***/ })
 /******/ ]);

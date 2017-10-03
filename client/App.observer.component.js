@@ -6,6 +6,7 @@ import netModel from "./models/net.model";
 import playersModel from "./models/players.model";
 // Components
 import CurrentTransfersTable from "./components/CurrentTransfersTable.component";
+import LearnedPlayersTable from "./components/LearnedPlayersTable.component";
 
 
 @observer
@@ -42,6 +43,18 @@ class App extends React.Component {
 	@computed get trainPlayers() { return playersModel.players.train; };
 
 
+	renderRouter = ()=> {
+		switch(window.location.pathname) {
+			case '/learnedPlayers':
+				return (
+					<LearnedPlayersTable />
+				);
+			default:
+				return <CurrentTransfersTable />
+		}
+	};
+
+
 	render() {
 		return (
 			<div style={{
@@ -56,8 +69,11 @@ class App extends React.Component {
 					padding: 20
 				}}>
 					<h4>Brain sokker predictor</h4>
+					<a href="/">home</a><br/>
+					<a href="/learnedPlayers">learnedPlayers</a>
 
-					<CurrentTransfersTable />
+					{ this.renderRouter() }
+
 				</div>
 			</div>
 		);
