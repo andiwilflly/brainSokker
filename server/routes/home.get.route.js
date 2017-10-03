@@ -1,4 +1,4 @@
-import handleRender from '../../built/server.js';
+const handleRender = require('../../built/server.js');
 
 
 function homeRoute(req, res) {
@@ -6,4 +6,4 @@ function homeRoute(req, res) {
 }
 
 
-export default homeRoute;
+module.exports = homeRoute;

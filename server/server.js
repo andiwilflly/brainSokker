@@ -1,13 +1,9 @@
+const fs = require('fs');
 const path = require('path');
 const Express = require('express');
 const React = require('react');
-import homeRoute from './routes/home.get.route';
-import learnedRoute from './routes/learned.get.route';
-import playersRoute from './routes/players.get.route';
-import keepersRoute from "./routes/keepers.get.route";
-import learnSavePlayerRoute from './routes/learn_save_player.post.route';
-import parseRoute from './routes/parse.get.route';
-import currentTransfers from './routes/currentTransfers.get.route';
+const learnedRoute = require('./routes/learned.get.route');
+const currentTransfers = require('./routes/currentTransfers.get.route');
 
 
 const MongoClient = require('mongodb').MongoClient;
@@ -24,19 +20,26 @@ MongoClient.connect("mongodb://andiwillfly:ward121314@ds127854.mlab.com:27854/ne
 	app.use('/static', Express.static(path.join(__dirname, '../static')));
 
 
-	app.use('/players', (req, res)=> playersRoute(DB, req, res) );
+	//app.use('/players', (req, res)=> playersRoute(DB, req, res) );
 
 	app.use('/learned', (req, res)=> learnedRoute(DB, req, res) );
 
-	app.post('/learn_save_player', (req, res)=> learnSavePlayerRoute(DB, req, res) );
+	//app.post('/learn_save_player', (req, res)=> learnSavePlayerRoute(DB, req, res) );
 
-	app.use('/keepers', (req, res)=> keepersRoute(DB, req, res) );
+	//app.use('/keepers', (req, res)=> keepersRoute(DB, req, res) );
 
-	app.use('/parse', (req, res)=> parseRoute(DB, req, res) );
+	//app.use('/parse', (req, res)=> parseRoute(DB, req, res) );
 
 	app.use('/current_transfers', (req, res)=> currentTransfers(DB, req, res) );
 
-	app.get('*', homeRoute);
+	app.get('*', (req, res)=> {
+		fs.readFile('./index.html', 'utf8', function (err, file) {
+			if (err) {
+				return console.log(err);
+			}
+			res.send(file);
+		});
+	});
 
 
 	app.listen(3000);

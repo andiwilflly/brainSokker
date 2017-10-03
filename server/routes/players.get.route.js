@@ -6,4 +6,4 @@ function playersRoute(DB, req, res) {
 }
 
 
-export default playersRoute;
+module.exports = playersRoute;

@@ -74,7 +74,7 @@ function currentTransfers(DB, req, res) {
 }
 
 
-export default currentTransfers;
+module.exports = currentTransfers;
 
 // notifierMax=103404315;
 // conf=909818678;

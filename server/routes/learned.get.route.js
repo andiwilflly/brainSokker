@@ -7,4 +7,4 @@ function learned(DB, req, res) {
 }
 
 
-export default learned;
+module.exports = learned;
