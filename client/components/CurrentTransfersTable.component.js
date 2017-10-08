@@ -13,9 +13,9 @@ class CurrentTransfersTable extends React.Component {
 
 	@computed get trainPlayers() { return playersModel.players.train; };
 
-	@computed get formattedTrainPlayers() { return playersModel.players.formattedTrain; };
-
 	@computed get currentTransfers() { return playersModel.players.currentTransfers; };
+
+	@computed get formattedCurrentTransfers() { return playersModel.currentTransfers.formatted; };
 
 
 	render() {
@@ -26,7 +26,7 @@ class CurrentTransfersTable extends React.Component {
 			<div>
 				{ _.map(this.currentTransfers.value, (player, i)=> {
 
-					const formattedPlayer = this.formattedTrainPlayers.value[player.name];
+					const formattedPlayer = this.formattedCurrentTransfers[player.name];
 					const quality = Math.round(this.NET.run(formattedPlayer).quality * 10);
 
 					return (

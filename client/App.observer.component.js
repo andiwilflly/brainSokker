@@ -19,7 +19,7 @@ class App extends React.Component {
 		this['getTrainPlayers -> create NET'] = reaction(
 			()=> this.trainPlayers.status === 'fulfilled',
 			()=> {
-				let learnedData = _.map(this.trainPlayers.value, (row)=> {
+				let learnedData = _.map(this.trainPlayers.value.values(), (row)=> {
 					delete row.player.input.name;
 					delete row.player.input.id;
 					delete row.player.input._id;

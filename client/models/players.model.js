@@ -1,5 +1,5 @@
 // MobX
-import {action, reaction, observable, observe, computed, autorun, asStructure, runInAction, toJs } from 'mobx';
+import {action, reaction, observable, extendObservable, observe, computed, autorun, asStructure, runInAction, toJs } from 'mobx';
 
 
 class PlayersModel {
@@ -7,15 +7,12 @@ class PlayersModel {
 	@observable players = {
 		train: {
 			status: 'pending',
-			value: []
-		},
-		formattedTrain: {
-			status: 'pending',
-			value: {}
+			value: observable.map()
 		},
 		currentTransfers: {
 			status: 'pending',
-			value: []
+			value: [],
+			formatted: {}
 		}
 	};
 
@@ -26,9 +23,50 @@ class PlayersModel {
 			.then((trainPlayers)=> {
 				runInAction(`PLAYERS-GET-TRAIN-PLAYERS-SUCCESS`, ()=> {
 					this.players.train.status = 'fulfilled';
-					this.players.train.value = trainPlayers;
+					_.forEach(trainPlayers, (player)=> {
+						player.player.output.position = player.player.output.position || '';
+						this.players.train.value.set(player._id, player);
+					});
+
 				});
 			});
+	}
+
+
+	saveTrainPlayer(playerData) {
+		const player = JSON.stringify({
+			input: playerData.player.input,
+			output: {
+				quality: playerData.player.output.quality,
+				position: playerData.player.output.position
+			}
+		});
+		window.fetch(`/learn_save_player?player=${player}`,
+			{ method: "POST" }).then((e)=> {
+				window.alert(`Player saved to DB.train`);
+		});
+	}
+
+
+	changeTrainPlayerQuality(playerName, quality) {
+		let currentPlayer = this.players.train.value.get(playerName);
+		if(!currentPlayer) return runInAction(`PLAYERS-CHANGE-TRAIN-PLAYER-QUALITY-ERROR ${playerName}`, ()=> {});
+
+		runInAction(`PLAYERS-CHANGE-TRAIN-PLAYER-QUALITY-SUCCESS ${playerName}`, ()=> {
+			currentPlayer.player.output.quality = quality;
+			this.players.train.value.set(playerName, currentPlayer);
+		});
+	}
+
+
+	changeTrainPlayerPosition(playerName, position) {
+		let currentPlayer = this.players.train.value.get(playerName);
+		if(!currentPlayer) return runInAction(`PLAYERS-CHANGE-TRAIN-PLAYER-POSITION-ERROR ${playerName}`, ()=> {});
+
+		runInAction(`PLAYERS-CHANGE-TRAIN-PLAYER-POSITION-SUCCESS ${playerName}`, ()=> {
+			currentPlayer.player.output.position = position;
+			this.players.train.value.set(playerName, currentPlayer);
+		});
 	}
 
 
@@ -40,18 +78,17 @@ class PlayersModel {
 					this.players.currentTransfers.status = 'fulfilled';
 					this.players.currentTransfers.value = currentTransfersPlayers;
 
-					let formattedTrainPlayers = {};
+					let formattedPlayers = {};
 					_.forEach(currentTransfersPlayers, (player)=> {
-						let formattedTrainPlayer = {};
+						let formattedPlayer = {};
 						_.forEach(player, (skill, skillName)=> {
 							if(skillName === 'name') return;
-							formattedTrainPlayer[skillName] = skill / 100;
+							formattedPlayer[skillName] = skill / 100;
 						});
-						formattedTrainPlayers[player.name] = formattedTrainPlayer;
+						formattedPlayers[player.name] = formattedPlayer;
 					});
 
-					this.players.formattedTrain.status = 'fulfilled';
-					this.players.formattedTrain.value = formattedTrainPlayers;
+					this.players.currentTransfers.formatted = formattedPlayers;
 				});
 			});
 	}

@@ -4,6 +4,7 @@ const Express = require('express');
 const React = require('react');
 const learnedRoute = require('./server/routes/learned.get.route');
 const currentTransfers = require('./server/routes/currentTransfers.get.route');
+const learnSavePlayerRoute = require('./server/routes/learn_save_player.post.route');
 
 
 const MongoClient = require('mongodb').MongoClient;
@@ -13,7 +14,6 @@ MongoClient.connect("mongodb://andiwillfly:ward121314@ds127854.mlab.com:27854/ne
 
 	const app = Express();
 	// Serve built files with express static files middleware
-	console.log('==========3', path.join(__dirname, 'built'));
 	app.use('/built', Express.static(path.join(__dirname, './built')));
 
 	// Serve normal requests with our handleRender function
@@ -22,6 +22,8 @@ MongoClient.connect("mongodb://andiwillfly:ward121314@ds127854.mlab.com:27854/ne
 	app.use('/learned', (req, res)=> learnedRoute(DB, req, res) );
 
 	app.use('/current_transfers', (req, res)=> currentTransfers(DB, req, res) );
+
+	app.post('/learn_save_player', (req, res)=> learnSavePlayerRoute(DB, req, res) );
 
 	app.get('*', (req, res)=> {
 		fs.readFile('./index.html', 'utf8', function (err, file) {

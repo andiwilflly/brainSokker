@@ -5,6 +5,7 @@ function learnSavePlayerRoute(DB, req, res) {
 	playersCollection.deleteOne({ _id: player.input.name });
 
 	const trainCollection = DB.collection('train');
+
 	trainCollection.save({
 		_id: player.input.name,
 		player
