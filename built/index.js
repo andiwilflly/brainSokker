@@ -61997,24 +61997,31 @@ var App = (0, _mobxReact.observer)(_class = (_class2 = function (_React$Componen
 	_inherits(App, _React$Component);
 
 	function App() {
-		var _ref;
-
-		var _temp, _this, _ret;
-
 		_classCallCheck(this, App);
 
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
-		}
+		// @SOURCE: https://mobxjs.github.io/mobx/refguide/spy.html
+		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
-		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.renderRouter = function () {
+		_this.renderRouter = function () {
 			switch (window.location.pathname) {
 				case '/learnedPlayers':
 					return React.createElement(_LearnedPlayersTable2.default, null);
 				default:
 					return React.createElement(_CurrentTransfersTable2.default, null);
 			}
-		}, _temp), _possibleConstructorReturn(_this, _ret);
+		};
+
+		(0, _mobx.spy)(function (event) {
+			if (event.type === 'action') {
+				if (event.name.match('FORM-')) return;
+
+				if (event.name.match('-ERROR')) return console.log('%c' + event.name, 'color: darkred');
+				if (event.name.match('-SUCCESS')) return console.log('%c' + event.name, 'color: #03a528;');
+				if (event.name.match('@reaction')) return console.log('%c' + event.name, 'color: orange;');
+				console.log('%c' + event.name, 'color: lightblue');
+			}
+		});
+		return _this;
 	}
 
 	_createClass(App, [{
@@ -63716,7 +63723,7 @@ var CurrentTransfersTable = (0, _mobxReact.observer)(_class = (_class2 = functio
 	}, {
 		key: 'formattedCurrentTransfers',
 		get: function get() {
-			return _players2.default.currentTransfers.formatted;
+			return _players2.default.players.currentTransfers.formatted;
 		}
 	}]);
 

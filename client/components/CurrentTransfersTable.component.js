@@ -15,7 +15,7 @@ class CurrentTransfersTable extends React.Component {
 
 	@computed get currentTransfers() { return playersModel.players.currentTransfers; };
 
-	@computed get formattedCurrentTransfers() { return playersModel.currentTransfers.formatted; };
+	@computed get formattedCurrentTransfers() { return playersModel.players.currentTransfers.formatted; };
 
 
 	render() {
