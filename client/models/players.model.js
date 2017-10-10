@@ -34,6 +34,7 @@ class PlayersModel {
 
 
 	saveTrainPlayer(playerData) {
+		
 		const player = JSON.stringify({
 			input: playerData.player.input,
 			output: {
@@ -43,7 +44,7 @@ class PlayersModel {
 		});
 		window.fetch(`/learn_save_player?player=${player}`,
 			{ method: "POST" }).then((e)=> {
-				window.alert(`Player saved to DB.train`);
+				console.log('SAVED');
 		});
 	}
 

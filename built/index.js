@@ -31077,6 +31077,7 @@ var PlayersModel = (_class = function () {
 	}, {
 		key: 'saveTrainPlayer',
 		value: function saveTrainPlayer(playerData) {
+
 			var player = JSON.stringify({
 				input: playerData.player.input,
 				output: {
@@ -31085,7 +31086,7 @@ var PlayersModel = (_class = function () {
 				}
 			});
 			window.fetch('/learn_save_player?player=' + player, { method: "POST" }).then(function (e) {
-				window.alert('Player saved to DB.train');
+				console.log('SAVED');
 			});
 		}
 	}, {
@@ -62042,7 +62043,6 @@ var App = (0, _mobxReact.observer)(_class = (_class2 = function (_React$Componen
 					delete row.player.input.estimated;
 					delete row.player.input.profit;
 
-					row.player.output.quality = +row.player.output.quality / 10;
 					return row.player;
 				});
 				_net2.default.trainNet(learnedData);
@@ -62061,7 +62061,8 @@ var App = (0, _mobxReact.observer)(_class = (_class2 = function (_React$Componen
 				{ style: {
 						fontSize: '16',
 						fontFamily: "Arial",
-						lineHeight: '150%'
+						lineHeight: '150%',
+						marginTop: 220
 					} },
 				React.createElement(
 					'div',
@@ -62072,20 +62073,40 @@ var App = (0, _mobxReact.observer)(_class = (_class2 = function (_React$Componen
 							padding: 20
 						} },
 					React.createElement(
-						'h4',
-						null,
-						'Brain sokker predictor'
-					),
-					React.createElement(
-						'a',
-						{ href: '/' },
-						'home'
-					),
-					React.createElement('br', null),
-					React.createElement(
-						'a',
-						{ href: '/learnedPlayers' },
-						'learnedPlayers'
+						'div',
+						{ style: { position: 'fixed', top: 0, left: 0, right: 0, backgroundColor: '#d2cfcf' } },
+						React.createElement(
+							'h4',
+							null,
+							'Brain sokker predictor'
+						),
+						React.createElement(
+							'a',
+							{ href: '/' },
+							'home'
+						),
+						React.createElement('br', null),
+						React.createElement(
+							'a',
+							{ href: '/learnedPlayers' },
+							'learnedPlayers'
+						),
+						React.createElement(
+							'div',
+							null,
+							'0.1 GK, ',
+							React.createElement('br', null),
+							'0.2 DEF, ',
+							React.createElement('br', null),
+							'0.3 RMID, ',
+							React.createElement('br', null),
+							'0.4 MID, ',
+							React.createElement('br', null),
+							'0.5 LMID, ',
+							React.createElement('br', null),
+							'0.6 ATT ',
+							React.createElement('br', null)
+						)
 					),
 					this.renderRouter()
 				)
@@ -63744,6 +63765,8 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _class, _desc, _value, _class2; // MobX
@@ -63822,11 +63845,14 @@ var LearnedPlayersTable = (0, _mobxReact.observer)(_class = (_class2 = function 
 				'div',
 				null,
 				_.map(this.trainPlayers.value.values(), function (playerData, i) {
-					var player = playerData.player.input;
+					playerData.player.input.name = playerData._id;
+					var player = _extends({}, playerData.player.input);
 					var output = playerData.player.output;
+					var age = player.age;
+					var name = playerData._id;
 
 					delete player.current;
-					player.name = playerData._id;
+					delete player.age;
 
 					_.forEach(player, function (skill, skillName) {
 						if (_.isNull(skill)) player[skillName] = 0;
@@ -63838,6 +63864,13 @@ var LearnedPlayersTable = (0, _mobxReact.observer)(_class = (_class2 = function 
 								margin: '20px 0',
 								border: '1px solid gray'
 							} },
+						React.createElement(
+							'h4',
+							null,
+							name,
+							' / ',
+							age * 100
+						),
 						React.createElement(
 							'table',
 							{ style: {
@@ -63880,7 +63913,7 @@ var LearnedPlayersTable = (0, _mobxReact.observer)(_class = (_class2 = function 
 													width: '25%',
 													padding: '0 10px'
 												}, key: names[1] },
-											player[names[1]] ? names[1] + ':' : ''
+											!_.isUndefined(player[names[1]]) ? names[1] + ':' : ''
 										),
 										React.createElement(
 											'td',
@@ -63910,9 +63943,9 @@ var LearnedPlayersTable = (0, _mobxReact.observer)(_class = (_class2 = function 
 								null,
 								'quality: ',
 								React.createElement('input', { type: 'text',
-									value: output.quality,
+									value: "" + output.quality,
 									onChange: function onChange(e) {
-										return _players2.default.changeTrainPlayerQuality(player.name, +e.nativeEvent.target.value);
+										return _players2.default.changeTrainPlayerQuality(name, e.nativeEvent.target.value);
 									} })
 							)
 						),
@@ -63930,7 +63963,7 @@ var LearnedPlayersTable = (0, _mobxReact.observer)(_class = (_class2 = function 
 								React.createElement('input', { type: 'text',
 									value: output.position || '',
 									onChange: function onChange(e) {
-										return _players2.default.changeTrainPlayerPosition(player.name, e.nativeEvent.target.value);
+										return _players2.default.changeTrainPlayerPosition(name, e.nativeEvent.target.value);
 									} })
 							)
 						),

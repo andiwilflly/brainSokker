@@ -6,6 +6,10 @@ function learnSavePlayerRoute(DB, req, res) {
 
 	const trainCollection = DB.collection('train');
 
+	player.output.position = +player.output.position;
+	player.output.quality = +player.output.quality;
+	
+	console.log('SAVE: ', player);
 	trainCollection.save({
 		_id: player.input.name,
 		player

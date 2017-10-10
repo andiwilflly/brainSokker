@@ -43,7 +43,6 @@ class App extends React.Component {
 					delete row.player.input.estimated;
 					delete row.player.input.profit;
 
-					row.player.output.quality = (+row.player.output.quality) / 10;
 					return row.player;
 				});
 				netModel.trainNet(learnedData);
@@ -77,7 +76,8 @@ class App extends React.Component {
 			<div style={{
 				fontSize: '16',
 				fontFamily: "Arial",
-				lineHeight: '150%'
+				lineHeight: '150%',
+				marginTop: 220
 			}}>
 				<div style={{
 					width: 1000,
@@ -85,9 +85,19 @@ class App extends React.Component {
 					margin: '0 auto',
 					padding: 20
 				}}>
-					<h4>Brain sokker predictor</h4>
-					<a href="/">home</a><br/>
-					<a href="/learnedPlayers">learnedPlayers</a>
+					<div style={{ position: 'fixed', top: 0, left: 0 , right: 0, backgroundColor: '#d2cfcf' }}>
+						<h4>Brain sokker predictor</h4>
+						<a href="/">home</a><br/>
+						<a href="/learnedPlayers">learnedPlayers</a>
+						<div>
+							0.1 GK, <br/>
+							0.2 DEF, <br/>
+							0.3 RMID, <br/>
+							0.4 MID, <br/>
+							0.5 LMID, <br/>
+							0.6 ATT <br/>
+						</div>
+					</div>
 
 					{ this.renderRouter() }
 

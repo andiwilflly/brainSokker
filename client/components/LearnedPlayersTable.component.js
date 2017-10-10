@@ -20,21 +20,25 @@ class LearnedPlayersTable extends React.Component {
 		return (
 			<div>
 				{ _.map(this.trainPlayers.value.values(), (playerData, i)=> {
-					let player = playerData.player.input;
+					playerData.player.input.name = playerData._id;
+					let player = { ...playerData.player.input };
 					let output = playerData.player.output;
+					const age = player.age;
+					const name = playerData._id;
 
 					delete player.current;
-					player.name = playerData._id;
+					delete player.age;
 
 					_.forEach(player, (skill, skillName)=> {
 						if(_.isNull(skill)) player[skillName] = 0;
 					});
-
+					
 					return (
 						<div key={i} style={{
 							margin: '20px 0',
 							border: '1px solid gray'
 						}}>
+							<h4>{ name } / { age * 100 }</h4>
 							<table style={{
 								width: '100%'
 							}}>
@@ -61,12 +65,12 @@ class LearnedPlayersTable extends React.Component {
 												width: '25%',
 												padding: '0 10px'
 											}} key={ names[1] }>
-												{ player[names[1]] ? names[1] + ':' : '' }
+												{ !_.isUndefined(player[names[1]]) ? names[1] + ':' : '' }
 											</td>
 											<td style={{
 												width: '25%',
 												padding: '0 10px'
-												}} key={ index+1 }>
+											}} key={ index+1 }>
 												<b>{ _.isNumber(player[names[1]]) ? Math.round(player[names[1]] * 100) : player[names[1]] }</b>
 											</td>
 										</tr>
@@ -82,8 +86,8 @@ class LearnedPlayersTable extends React.Component {
 							}}>
 								<p>
 									quality: <input type="text"
-												   value={ output.quality }
-												   onChange={ (e)=> playersModel.changeTrainPlayerQuality(player.name, +e.nativeEvent.target.value) } />
+												   value={ "" + output.quality }
+												   onChange={ (e)=> playersModel.changeTrainPlayerQuality(name, e.nativeEvent.target.value) } />
 								</p>
 							</div>
 							<div style={{
@@ -94,7 +98,7 @@ class LearnedPlayersTable extends React.Component {
 								<p>
 									position: <input type="text"
 													value={ output.position || '' }
-													onChange={ (e)=> playersModel.changeTrainPlayerPosition(player.name, e.nativeEvent.target.value) }/>
+													onChange={ (e)=> playersModel.changeTrainPlayerPosition(name, e.nativeEvent.target.value) }/>
 								</p>
 							</div>
 							<div>
