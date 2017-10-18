@@ -18,6 +18,14 @@ class CurrentTransfersTable extends React.Component {
 	@computed get formattedCurrentTransfers() { return playersModel.players.currentTransfers.formatted; };
 
 
+	positions = {
+		'0.1': 'GK',
+		'0.2': 'DEF',
+		'0.3': 'MID',
+		'0.4': 'ATT',
+	};
+
+
 	render() {
 		if(this.trainPlayers.status === 'pending') return <h4>Loading trainPlayers...</h4>;
 		if(this.currentTransfers.status === 'pending') return <h4>Loading currentTransfers...</h4>;
@@ -27,7 +35,9 @@ class CurrentTransfersTable extends React.Component {
 				{ _.map(this.currentTransfers.value, (player, i)=> {
 
 					const formattedPlayer = this.formattedCurrentTransfers[player.name];
-					const quality = Math.round(this.NET.run(formattedPlayer).quality * 10);
+					const netRunData = this.NET.run(formattedPlayer);
+					const quality = Math.round(netRunData.quality * 10);
+					const position = netRunData.position.toFixed(1);
 
 					return (
 						<div key={i} style={{
@@ -80,6 +90,8 @@ class CurrentTransfersTable extends React.Component {
 								borderTop: '1px solid gray'
 							}}>
 								<p>quality: { quality }</p>
+
+								<p>position: { this.positions[position] } ({ netRunData.position }/{ position })</p>
 							</div>
 						</div>
 					);

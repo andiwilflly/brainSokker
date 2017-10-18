@@ -7,6 +7,7 @@ import playersModel from "./models/players.model";
 // Components
 import CurrentTransfersTable from "./components/CurrentTransfersTable.component";
 import LearnedPlayersTable from "./components/LearnedPlayersTable.component";
+import Interface from "./components/Interface.component";
 
 
 @observer
@@ -45,6 +46,7 @@ class App extends React.Component {
 
 					return row.player;
 				});
+				console.log(learnedData);
 				netModel.trainNet(learnedData);
 			}
 		);
@@ -72,6 +74,8 @@ class App extends React.Component {
 
 
 	render() {
+		if(window.location.pathname === '/interface') return <Interface />;
+
 		return (
 			<div style={{
 				fontSize: '16',
@@ -86,16 +90,14 @@ class App extends React.Component {
 					padding: 20
 				}}>
 					<div style={{ position: 'fixed', top: 0, left: 0 , right: 0, backgroundColor: '#d2cfcf' }}>
-						<h4>Brain sokker predictor</h4>
 						<a href="/">home</a><br/>
-						<a href="/learnedPlayers">learnedPlayers</a>
+						<a href="/learnedPlayers">learnedPlayers</a><br/>
+						<a href="/interface">interface</a>
 						<div>
 							0.1 GK, <br/>
 							0.2 DEF, <br/>
-							0.3 RMID, <br/>
-							0.4 MID, <br/>
-							0.5 LMID, <br/>
-							0.6 ATT <br/>
+							0.3 MID, <br/>
+							0.4 ATT <br/>
 						</div>
 					</div>
 
