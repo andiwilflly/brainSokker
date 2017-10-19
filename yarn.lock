@@ -3968,6 +3968,10 @@ react-dom@next:
     object-assign "^4.1.0"
     prop-types "^15.5.6"
 
+react-input-mask@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-input-mask/-/react-input-mask-1.0.7.tgz#690d2189a1206972aeb82f332336be337fddf280"
+
 react-resize-detector@0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-0.6.0.tgz#7625d60edf6d89c812d4833d49ef53696dd9bca9"

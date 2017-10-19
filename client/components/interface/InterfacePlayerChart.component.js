@@ -1,10 +1,6 @@
 // MobX
 import { observer } from 'mobx-react';
 import {action, reaction, observable, observe, computed, autorun, asStructure, runInAction, toJs } from 'mobx';
-// Models
-import netModel from "../models/net.model";
-import playersModel from "../models/players.model";
-
 // Chart
 // @SOURCE: https://github.com/recharts/recharts/blob/master/demo/component/PieChart.js
 import { ResponsiveContainer, PieChart, Sector, LabelList, Cell, Legend, Pie } from "recharts";
@@ -19,16 +15,30 @@ const data01 = [
 	{ name: 'ATT', value: 1 }
 ];
 
+const player = {
+	"name": "Miltos Kotsou",
+	"age": 0.35,
+	"stamina": 0.11,
+	"keeper": 0,
+	"pace": 0.14,
+	"defender": 0.11,
+	"technique": 0.08,
+	"playmaker": 0.06,
+	"passing": 0.08,
+	"striker": 0.07
+};
+
 
 @observer
-class CurrentTransfersTable extends React.Component {
+class InterfacePlayerChart extends React.Component {
 
-	state = { activeIndex: -1 };
+	@observable activeIndex = -1;
 
 
-	@computed get NET() { return netModel.NET; };
+	get chartData() {
+		return _.map(this.props.playerData.output, (value, name)=> ({ name, value: +value }))
+	};
 
-	@computed get currentTransfers() { return playersModel.players.currentTransfers; };
 
 	renderActiveShape = (props)=> {
 		const RADIAN = Math.PI / 180;
@@ -69,47 +79,42 @@ class CurrentTransfersTable extends React.Component {
 				<text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">
 					{ `${payload.name}` }
 				</text>
-				<text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
+				{/*<text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#333">
 					{`${payload.value}`}
-				</text>
+				</text>*/}
 			</g>
 		);
 	};
 
 
 	onPieEnter = (data, index, e)=> {
-		this.setState({
-			activeIndex: index,
-		});
+		this.activeIndex = index;
 	};
 
 
 	render() {
 		return (
-			<div style={{ fontFamily: 'Arial' }}>
-				<div style={{ width: '50%', height: 300, background: 'white' }}>
-					<ResponsiveContainer>
-						<PieChart width={100} height={100}>
-							<Pie data={data01}
-								 dataKey="value"
-								 activeShape={this.renderActiveShape}
-								 activeIndex={this.state.activeIndex}
-								 onMouseEnter={this.onPieEnter}
-								 cx={'50%'}
-								 cy={'50%'}
-								 innerRadius={0}
-								 outerRadius={70}>
-								{ data01.map((entry, index)=> (
-									<Cell key={`slice-${index}`} fill={colors[index % 10]} />
-								)) }
-							</Pie>
-						</PieChart>
-					</ResponsiveContainer>
-				</div>
-			</div>
-		);
+			<ResponsiveContainer>
+				<PieChart width={100} height={100}>
+					<Legend verticalAlign="top"/>
+					<Pie data={this.chartData}
+						 dataKey="value"
+						 activeShape={this.renderActiveShape}
+						 activeIndex={this.activeIndex}
+						 onMouseEnter={this.onPieEnter}
+						 cx={'50%'}
+						 cy={'50%'}
+						 innerRadius={0}
+						 outerRadius={70}>
+						{ data01.map((entry, index)=> (
+							<Cell key={`slice-${index}`} fill={colors[index % 10]} />
+						)) }
+					</Pie>
+				</PieChart>
+			</ResponsiveContainer>
+		)
 	}
 }
 
-export default CurrentTransfersTable;
 
+export default InterfacePlayerChart

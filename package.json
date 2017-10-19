@@ -28,6 +28,7 @@
 		"net": "^1.0.2",
 		"react": "next",
 		"react-dom": "next",
+		"react-input-mask": "^1.0.7",
 		"react-transmit": "^3.2.0",
 		"recharts": "^1.0.0-alpha.6",
 		"request": "^2.81.0",

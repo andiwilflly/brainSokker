@@ -7,7 +7,7 @@ import playersModel from "./models/players.model";
 // Components
 import CurrentTransfersTable from "./components/CurrentTransfersTable.component";
 import LearnedPlayersTable from "./components/LearnedPlayersTable.component";
-import Interface from "./components/Interface.component";
+import Interface from "./components/interface/Interface.component";
 
 
 @observer
@@ -34,22 +34,22 @@ class App extends React.Component {
 		playersModel.getTrainPlayers();
 		playersModel.getCurrentTransfersPlayers();
 
-		this['getTrainPlayers -> create NET'] = reaction(
-			()=> this.trainPlayers.status === 'fulfilled',
-			()=> {
-				let learnedData = _.map(this.trainPlayers.value.values(), (row)=> {
-					delete row.player.input.name;
-					delete row.player.input.id;
-					delete row.player.input._id;
-					delete row.player.input.estimated;
-					delete row.player.input.profit;
-
-					return row.player;
-				});
-				console.log(learnedData);
-				netModel.trainNet(learnedData);
-			}
-		);
+		// this['getTrainPlayers -> create NET'] = reaction(
+		// 	()=> this.trainPlayers.status === 'fulfilled',
+		// 	()=> {
+		// 		let learnedData = _.map(this.trainPlayers.value.values(), (row)=> {
+		// 			delete row.player.input.name;
+		// 			delete row.player.input.id;
+		// 			delete row.player.input._id;
+		// 			delete row.player.input.estimated;
+		// 			delete row.player.input.profit;
+		//
+		// 			return row.player;
+		// 		});
+		// 		console.log(learnedData);
+		// 		netModel.trainNet(learnedData);
+		// 	}
+		// );
 	}
 
 
