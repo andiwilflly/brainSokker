@@ -33,6 +33,14 @@ class PlayersModel {
 	}
 
 
+	saveInterfacePlayerData(playerData) {
+		window.fetch(`/save_interface_player_data?playerData=${JSON.stringify(playerData)}`,
+			{ method: "POST" }).then((e)=> {
+			console.log('save_interface_player_data SAVED');
+		});
+	}
+
+
 	saveTrainPlayer(playerData) {
 		
 		const player = JSON.stringify({

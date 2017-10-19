@@ -2,6 +2,8 @@ import InputMask from 'react-input-mask';
 // MobX
 import { observer } from 'mobx-react';
 import {action, reaction, observable, observe, computed, autorun, asStructure, runInAction, toJs } from 'mobx';
+// Models
+import playersModel from "../../models/players.model";
 // Components
 import InterfacePlayerChart from "./InterfacePlayerChart.component";
 
@@ -26,7 +28,7 @@ class InterfacePlayer extends React.Component {
 
 
 	savePlayerData = ()=> {
-		console.log('save??', this.playerData);
+		playersModel.saveInterfacePlayerData(this.playerData);
 	};
 
 
@@ -34,31 +36,31 @@ class InterfacePlayer extends React.Component {
 		const player = this.props.player;
 
 		return (
-			<div style={{ width: 700, height: 350, background: 'white', margin: 20, float: 'left' }}>
-				<div style={{ float: 'left', padding: '20px 0 0 20px', width: 250 }}>
+			<div style={{ width: '45%', height: 350, background: 'white', margin: 20, float: 'left' }}>
+				<div style={{ float: 'left', padding: '20px 0 0 20px', width: '35%' }}>
 					<p style={{ margin: '0 0 10px 0' }}>{ player.name }</p>
-					<p>age { player.age }</p>
+					<p>age { player.age * 100 }</p>
 
 					<div style={{ fontSize: '14px', margin: '35px 0 0 0' }}>
 						<div key='1' style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid black' }}>
-							<p style={{ padding: '10px' }}>{ player.stamina } (stamina)</p>
-							<p style={{ padding: '10px' }}>{ player.keeper } (keeper)</p>
+							<p style={{ padding: '10px' }}>{ Math.round(player.stamina * 100) } (stamina)</p>
+							<p style={{ padding: '10px' }}>{ Math.round(player.keeper * 100) } (keeper)</p>
 						</div>
 						<div key='2' style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid black' }}>
-							<p style={{ padding: '10px' }}>{ player.pace } (pace)</p>
-							<p style={{ padding: '10px' }}>{ player.defender } (defender)</p>
+							<p style={{ padding: '10px' }}>{ Math.round(player.pace * 100) } (pace)</p>
+							<p style={{ padding: '10px' }}>{ Math.round(player.defender * 100) } (defender)</p>
 						</div>
 						<div key='3' style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid black' }}>
-							<p style={{ padding: '10px' }}>{ player.technique } (technique)</p>
-							<p style={{ padding: '10px' }}>{ player.playmaker } (playmaker)</p>
+							<p style={{ padding: '10px' }}>{ Math.round(player.technique * 100) } (technique)</p>
+							<p style={{ padding: '10px' }}>{ Math.round(player.playmaker * 100) } (playmaker)</p>
 						</div>
 						<div key='4' style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid black' }}>
-							<p style={{ padding: '10px' }}>{ player.passing } (passing)</p>
-							<p style={{ padding: '10px' }}>{ player.striker } (striker)</p>
+							<p style={{ padding: '10px' }}>{ Math.round(player.passing * 100) } (passing)</p>
+							<p style={{ padding: '10px' }}>{ Math.round(player.striker * 100) } (striker)</p>
 						</div>
 					</div>
 				</div>
-				<div style={{ float: 'right', width: 400, height: 280, marginTop: 20 }}>
+				<div style={{ float: 'right', width: '60%', height: 280, marginTop: 20 }}>
 					<InterfacePlayerChart playerData={ this.playerData } />
 				</div>
 

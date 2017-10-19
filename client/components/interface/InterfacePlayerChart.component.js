@@ -96,7 +96,7 @@ class InterfacePlayerChart extends React.Component {
 		return (
 			<ResponsiveContainer>
 				<PieChart width={100} height={100}>
-					<Legend verticalAlign="top"/>
+					<Legend verticalAlign="top" align="right" />
 					<Pie data={this.chartData}
 						 dataKey="value"
 						 activeShape={this.renderActiveShape}

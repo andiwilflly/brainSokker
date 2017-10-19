@@ -13,7 +13,7 @@ import InterfacePlayer from "./InterfacePlayer.component";
 class Interface extends React.Component {
 
 
-	@computed get currentTransfers() { return _.take(playersModel.players.currentTransfers.value, 5); };
+	@computed get currentTransfers() { return _.take(playersModel.players.currentTransfers.value, 50); };
 
 
 	render() {

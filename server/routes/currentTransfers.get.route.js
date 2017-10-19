@@ -39,15 +39,15 @@ function currentTransfers(DB, req, res) {
 	// 									.text().trim().split('\n');
 	//
 	// 								const name = $player.find('a').text().trim();
-	// 								const age = +$player.find('.h5').text().trim().split('wiek')[1];
-	// 								const stamina = +skills[0].split('[')[1].split(']')[0];
-	// 								const keeper = +skills[1].split('[')[1].split(']')[0];
-	// 								const pace = +skills[2].split('[')[1].split(']')[0];
-	// 								const defender = +skills[3].split('[')[1].split(']')[0];
-	// 								const technique = +skills[4].split('[')[1].split(']')[0];
-	// 								const playmaker = +skills[5].split('[')[1].split(']')[0];
-	// 								const passing = +skills[6].split('[')[1].split(']')[0];
-	// 								const striker = +skills[7].split('[')[1].split(']')[0];
+	// 								const age = +$player.find('.h5').text().trim().split('wiek')[1] / 100;
+	// 								const stamina = +skills[0].split('[')[1].split(']')[0] / 100;
+	// 								const keeper = +skills[1].split('[')[1].split(']')[0] / 100;
+	// 								const pace = +skills[2].split('[')[1].split(']')[0] / 100;
+	// 								const defender = +skills[3].split('[')[1].split(']')[0] / 100;
+	// 								const technique = +skills[4].split('[')[1].split(']')[0] / 100;
+	// 								const playmaker = +skills[5].split('[')[1].split(']')[0] / 100;
+	// 								const passing = +skills[6].split('[')[1].split(']')[0] / 100;
+	// 								const striker = +skills[7].split('[')[1].split(']')[0] / 100;
 	//
 	// 								DATA.push({
 	// 									name, age, stamina, keeper, pace, defender, technique, playmaker, passing, striker
@@ -63,7 +63,7 @@ function currentTransfers(DB, req, res) {
 	// 		}
 	//
 	// 		Promise.all(promisePlayersDataArray).then((players)=> {
-	// 			//fs.writeFileSync(__dirname + `/currentTransfers.json`, JSON.stringify([].concat.apply([], players)), null, 4);
+	// 			fs.writeFileSync(__dirname + `/currentTransfers.json`, JSON.stringify([].concat.apply([], players)), null, 4);
 	// 			res.send(JSON.stringify([].concat.apply([], players)));
 	// 		})
 	//

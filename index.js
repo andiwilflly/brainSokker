@@ -5,6 +5,7 @@ const React = require('react');
 const learnedRoute = require('./server/routes/learned.get.route');
 const currentTransfers = require('./server/routes/currentTransfers.get.route');
 const learnSavePlayerRoute = require('./server/routes/learn_save_player.post.route');
+const saveInterfacePlayerData = require('./server/routes/save_interface_player_data.post.route');
 
 
 const MongoClient = require('mongodb').MongoClient;
@@ -24,6 +25,8 @@ MongoClient.connect("mongodb://andiwillfly:ward121314@ds127854.mlab.com:27854/ne
 	app.use('/current_transfers', (req, res)=> currentTransfers(DB, req, res) );
 
 	app.post('/learn_save_player', (req, res)=> learnSavePlayerRoute(DB, req, res) );
+
+	app.post('/save_interface_player_data', (req, res)=> saveInterfacePlayerData(DB, req, res) );
 
 	app.get('*', (req, res)=> {
 		fs.readFile('./index.html', 'utf8', function (err, file) {
