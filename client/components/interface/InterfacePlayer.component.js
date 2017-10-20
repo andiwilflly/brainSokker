@@ -37,6 +37,8 @@ class InterfacePlayer extends React.Component {
 	}
 
 
+	@computed get interfacePlayers() { return playersModel.players.interface; };
+
 	@computed get playerData() {
 		return {
 			input: this.props.player,
