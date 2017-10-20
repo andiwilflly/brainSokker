@@ -11,14 +11,15 @@ class PlayersModel {
 		},
 		currentTransfers: {
 			status: 'pending',
-			value: [],
-			formatted: {}
+			value: []
 		}
 	};
 
 
 	getInterfacePlayers() {
-		window.fetch('/interface_players')
+		this.players.interface.status = 'pending';
+		this.players.interface.value.clear();
+		return window.fetch('/interface_players')
 			.then((interfacePlayers)=> interfacePlayers.json())
 			.then((interfacePlayers)=> {
 				runInAction(`PLAYERS-GET-INTERFACE-PLAYERS-SUCCESS`, ()=> {
@@ -45,18 +46,6 @@ class PlayersModel {
 				runInAction(`PLAYERS-GET-CURRENT-TRANSFERS-PLAYERS-SUCCESS`, ()=> {
 					this.players.currentTransfers.status = 'fulfilled';
 					this.players.currentTransfers.value = currentTransfersPlayers;
-
-					let formattedPlayers = {};
-					_.forEach(currentTransfersPlayers, (player)=> {
-						let formattedPlayer = {};
-						_.forEach(player, (skill, skillName)=> {
-							if(skillName === 'name') return;
-							formattedPlayer[skillName] = skill / 100;
-						});
-						formattedPlayers[player.name] = formattedPlayer;
-					});
-
-					this.players.currentTransfers.formatted = formattedPlayers;
 				});
 			});
 	}

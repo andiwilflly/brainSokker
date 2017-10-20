@@ -34,8 +34,13 @@ class InterfacePlayer extends React.Component {
 
 
 	componentDidMount() {
-		this.setNetRunData();
+		this.setNetRunData(this.props.player);
 		setTimeout(()=> this.isReady = true, this.props.index * 200);
+	}
+
+
+	componentWillReceiveProps(nextProps) {
+		//if(this.props.player !== nextProps.player) this.setNetRunData(nextProps.player);
 	}
 
 
@@ -56,15 +61,17 @@ class InterfacePlayer extends React.Component {
 	};
 
 
-	interfacePlayer(name) { 
+	interfacePlayer(name) {
 		return _.find(this.interfacePlayers.value.toJS(), (player)=> player._id === name);
 	}
 
 
-	setNetRunData() {
-		let netRunData = _.clone(this.props.player);
+	setNetRunData(player) {
+		let netRunData = _.clone(player);
 		delete netRunData.name;
 		netRunData = this.NET.run(netRunData);
+
+		if(player.name === 'Patrik Dugovics') console.log('netRunData', netRunData.ATT);
 		_.forEach(netRunData, (value, name)=> this.output.set(name, +value.toFixed(1)));
 	};
 
@@ -78,8 +85,10 @@ class InterfacePlayer extends React.Component {
 	savePlayerData() {
 		this.isSavingData = true;
 		playersModel.saveInterfacePlayerData(this.playerData).then(()=> {
-			console.log('TEST?');
 			this.isSavingData = false;
+			playersModel.getInterfacePlayers().then(()=> {
+				//playersModel.getCurrentTransfersPlayers(); // TODO: wtf?
+			});
 		});
 	};
 
@@ -89,6 +98,7 @@ class InterfacePlayer extends React.Component {
 		const index = this.props.index;
 		const interfacePlayer = this.interfacePlayer(player.name);
 
+		if(player.name === 'Patrik Dugovics') console.log('rener!2', this.output.get('ATT'));
 		if(!this.isReady) return (
 			<div style={{
 				width: this.table.itemWidth,

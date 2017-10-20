@@ -7,10 +7,13 @@ class NetModel {
 
 	@observable NET = window.NET = new brain.NeuralNetwork();
 
+	@observable isTrained = false;
+
 
 	trainNet(learnedData = {}) {
 		runInAction(`NET-TRAIN-SUCCESS`, ()=> {
 			this.NET.train(learnedData);
+			this.isTrained = true;
 		});
 	}
 }

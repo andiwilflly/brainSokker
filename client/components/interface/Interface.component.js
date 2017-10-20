@@ -21,24 +21,24 @@ class Interface extends React.Component {
 
 
 	 componentDidMount() {
-		 this['getInterfacePlayers -> create and learn NET'] = reaction(
-			 () => this.interfacePlayers.status === 'fulfilled',
-			 () => {
+		 this['@reaction getInterfacePlayers -> create and learn NET'] = reaction(
+			 ()=> this.interfacePlayers.status === 'fulfilled',
+			 ()=> {
 				 let learnedData = _.map(this.interfacePlayers.value.toJS(), (row) => {
 					 delete row.player.input.name;
 					 return row.player;
 				 });
 				 netModel.trainNet(learnedData);
 			 },
-			 {name: 'getInterfacePlayers -> create and learn NET'}
+			 {name: '@reaction getInterfacePlayers -> create and learn NET'}
 		 );
 
-		 this['getTransfersPlayers -> render'] = reaction(
+		 this['@reaction getTransfersPlayers -> render'] = reaction(
 			 ()=> this.currentTransfers.status === 'fulfilled',
 			 ()=> {
 				 this.sortedPlayers = _.take(playersModel.players.currentTransfers.value, 20);
 			 },
-			 { name: 'getInterfacePlayers -> render'}
+			 { name: '@reaction getInterfacePlayers -> render'}
 		 );
 	 }
 
@@ -48,14 +48,16 @@ class Interface extends React.Component {
 	@observable sortBy = '';
 
 
+	@computed get NET() { return netModel.NET; };
+
 	@computed get interfacePlayers() { return playersModel.players.interface; };
 
 	@computed get currentTransfers() { return playersModel.players.currentTransfers; };
 
 
 	render() {
-		if(this.interfacePlayers.status !== 'fulfilled') return <p>Loading...</p>;
-		if(this.currentTransfers.status !== 'fulfilled') return <p>Loading...</p>;
+		if(!netModel.isTrained) return <p>NET Loading...</p>;
+		if(this.currentTransfers.status !== 'fulfilled') return <p>currentTransfers Loading...</p>;
 
 		return (
 			<div style={{ fontFamily: 'Arial' }}>
