@@ -4,7 +4,7 @@ import {action, reaction, observable, observe, computed, autorun, asStructure, r
 
 class InterfaceTableModel {
 
-	@observable windowWidth = window.innerWidth;
+	@observable windowWidth = window.innerWidth - this.pageScrollBar;
 
 	itemHeight = 350;
 
@@ -12,17 +12,17 @@ class InterfaceTableModel {
 
 	itemBetweenDistance = 20;
 
+	pageScrollBar = 15;
 
 	get itemsInRow() { return Math.floor((this.windowWidth - this.itemBetweenDistance*3) / this.itemMinWidth); };
 
-	get itemWidth() { return this.windowWidth / this.itemsInRow - (this.itemBetweenDistance * (this.itemsInRow + 1)); };
+	get itemWidth() { return (this.windowWidth - (this.itemBetweenDistance * (this.itemsInRow + 1))) / this.itemsInRow; };
 
 	currentRow(index) { return (Math.ceil((index+1) / this.itemsInRow)); };
 
 	top(index) { return this.itemHeight * (this.currentRow(index) - 1) + (this.itemBetweenDistance * this.currentRow(index)); };
 
 	left(index) { return (index % this.itemsInRow) * this.itemWidth + ((index % this.itemsInRow + 1) * this.itemBetweenDistance); };
-
 }
 
 export default InterfaceTableModel;

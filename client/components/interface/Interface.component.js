@@ -13,11 +13,11 @@ import InterfacePlayer from "./InterfacePlayer.component";
 class Interface extends React.Component {
 
 
-	@observable sortedPlayers = _.take(playersModel.players.currentTransfers.value, 5);
+	@observable sortedPlayers = _.take(playersModel.players.currentTransfers.value, 50);
 
 	@observable sortBy = '';
 
-	@computed get currentTransfers() { return _.take(playersModel.players.currentTransfers.value, 5); };
+	@computed get currentTransfers() { return _.take(playersModel.players.currentTransfers.value, 50); };
 
 
 	render() {

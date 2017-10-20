@@ -19,12 +19,16 @@ class InterfacePlayer extends React.Component {
 		ATT: '0.0'
 	});
 
+	@observable isReady = false;
 
-	constructor() {
+
+	constructor(props) {
 		super();
 		this.table = new InterfaceTabelModel();
 
 		window.addEventListener('resize', this.onWindowResize);
+
+		setTimeout(()=> this.isReady = true, props.index * 300);
 	}
 
 
@@ -42,7 +46,8 @@ class InterfacePlayer extends React.Component {
 
 
 	onWindowResize = ()=> {
-		this.table.windowWidth = window.innerWidth;
+		clearTimeout(this.timeout);
+		this.timeout = setTimeout(()=> this.table.windowWidth = window.innerWidth - this.table.pageScrollBar, 100);
 	};
 
 
@@ -55,6 +60,17 @@ class InterfacePlayer extends React.Component {
 		const player = this.props.player;
 		const index = this.props.index;
 
+		if(!this.isReady) return (
+			<div style={{
+				width: this.table.itemWidth,
+				height: this.table.itemHeight,
+				top: this.table.top(index),
+				left: this.table.left(index),
+				background: 'transparent',
+				position: 'absolute'
+			}} />
+		);
+
 		return (
 			<div style={{
 				width: this.table.itemWidth,
@@ -63,7 +79,7 @@ class InterfacePlayer extends React.Component {
 				left: this.table.left(index),
 				background: 'white',
 				position: 'absolute',
-				transition: '1s all'
+				// transition: '1s all'
 			}}>
 				<div style={{ float: 'left', padding: '20px 0 0 20px', width: '35%' }}>
 					<p style={{ margin: '0 0 10px 0' }}>{ player.name }</p>
@@ -88,6 +104,7 @@ class InterfacePlayer extends React.Component {
 						</div>
 					</div>
 				</div>
+
 				<div style={{ float: 'right', width: '60%', height: 280, marginTop: 20 }}>
 					<InterfacePlayerChart playerData={ this.playerData } />
 				</div>
