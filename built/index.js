@@ -85390,7 +85390,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _class, _desc, _value, _class2; // MobX
+var _class, _desc, _value, _class2, _descriptor, _descriptor2; // MobX
 
 // Models
 
@@ -85410,6 +85410,16 @@ var _InterfacePlayer = __webpack_require__(498);
 var _InterfacePlayer2 = _interopRequireDefault(_InterfacePlayer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _initDefineProp(target, property, descriptor, context) {
+	if (!descriptor) return;
+	Object.defineProperty(target, property, {
+		enumerable: descriptor.enumerable,
+		configurable: descriptor.configurable,
+		writable: descriptor.writable,
+		value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+	});
+}
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -85446,37 +85456,98 @@ function _applyDecoratedDescriptor(target, property, decorators, descriptor, con
 	return desc;
 }
 
+function _initializerWarningHelper(descriptor, context) {
+	throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
+}
+
 // create edit form for each player
 // save to [interface]
 var Interface = (0, _mobxReact.observer)(_class = (_class2 = function (_React$Component) {
 	_inherits(Interface, _React$Component);
 
 	function Interface() {
+		var _ref;
+
+		var _temp, _this, _ret;
+
 		_classCallCheck(this, Interface);
 
-		return _possibleConstructorReturn(this, (Interface.__proto__ || Object.getPrototypeOf(Interface)).apply(this, arguments));
+		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+			args[_key] = arguments[_key];
+		}
+
+		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Interface.__proto__ || Object.getPrototypeOf(Interface)).call.apply(_ref, [this].concat(args))), _this), _initDefineProp(_this, 'sortedPlayers', _descriptor, _this), _initDefineProp(_this, 'sortBy', _descriptor2, _this), _temp), _possibleConstructorReturn(_this, _ret);
 	}
 
 	_createClass(Interface, [{
 		key: 'render',
 		value: function render() {
+			var _this2 = this;
+
+			if (_players2.default.players.currentTransfers.status !== 'fulfilled') return React.createElement(
+				'p',
+				null,
+				'Loading...'
+			);
+
 			return React.createElement(
 				'div',
 				{ style: { fontFamily: 'Arial' } },
-				_.map(this.currentTransfers, function (player, i) {
-					return React.createElement(_InterfacePlayer2.default, { player: player, key: i });
-				})
+				React.createElement(
+					'div',
+					{ style: { position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1, display: 'flex', justifyContent: 'space-around' } },
+					React.createElement(
+						'button',
+						{ style: {
+								margin: '20px 0',
+								float: 'left',
+								border: 'none',
+								padding: '15px 25px',
+								color: 'white',
+								background: 'rgb(193, 53, 63)',
+								cursor: 'pointer',
+								outline: 'none',
+								fontSize: 25
+							},
+							onClick: function onClick() {
+								_this2.sortBy = _this2.sortBy === 'age:down' ? 'age:up' : 'age:down';
+								_this2.sortedPlayers = _.sortBy(_this2.currentTransfers, function (player) {
+									return _this2.sortBy === 'age:down' ? -player.age : player.age;
+								});
+							}
+						},
+						'age ',
+						this.sortBy === 'age:down' ? '⬇' : this.sortBy === 'age:up' ? '⬆' : ' '
+					)
+				),
+				React.createElement(
+					'div',
+					{ style: { marginTop: 80, position: 'relative' } },
+					_.map(this.sortedPlayers, function (player, i) {
+						return React.createElement(_InterfacePlayer2.default, { player: player, key: player.name, index: i });
+					})
+				)
 			);
 		}
 	}, {
 		key: 'currentTransfers',
 		get: function get() {
-			return _.take(_players2.default.players.currentTransfers.value, 50);
+			return _.take(_players2.default.players.currentTransfers.value, 5);
 		}
 	}]);
 
 	return Interface;
-}(React.Component), (_applyDecoratedDescriptor(_class2.prototype, 'currentTransfers', [_mobx.computed], Object.getOwnPropertyDescriptor(_class2.prototype, 'currentTransfers'), _class2.prototype)), _class2)) || _class;
+}(React.Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'sortedPlayers', [_mobx.observable], {
+	enumerable: true,
+	initializer: function initializer() {
+		return _.take(_players2.default.players.currentTransfers.value, 5);
+	}
+}), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, 'sortBy', [_mobx.observable], {
+	enumerable: true,
+	initializer: function initializer() {
+		return '';
+	}
+}), _applyDecoratedDescriptor(_class2.prototype, 'currentTransfers', [_mobx.computed], Object.getOwnPropertyDescriptor(_class2.prototype, 'currentTransfers'), _class2.prototype)), _class2)) || _class;
 
 exports.default = Interface;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(112)))
@@ -85513,6 +85584,10 @@ var _mobx = __webpack_require__(57);
 var _players = __webpack_require__(111);
 
 var _players2 = _interopRequireDefault(_players);
+
+var _InterfaceTable = __webpack_require__(1019);
+
+var _InterfaceTable2 = _interopRequireDefault(_InterfaceTable);
 
 var _InterfacePlayerChart = __webpack_require__(505);
 
@@ -85559,36 +85634,55 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 	_inherits(InterfacePlayer, _React$Component);
 
 	function InterfacePlayer() {
-		var _ref;
-
-		var _temp, _this, _ret;
-
 		_classCallCheck(this, InterfacePlayer);
 
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
-		}
+		var _this = _possibleConstructorReturn(this, (InterfacePlayer.__proto__ || Object.getPrototypeOf(InterfacePlayer)).call(this));
 
-		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = InterfacePlayer.__proto__ || Object.getPrototypeOf(InterfacePlayer)).call.apply(_ref, [this].concat(args))), _this), _this.output = _mobx.observable.map({
+		_this.output = _mobx.observable.map({
 			GK: '0.0',
 			DEF: '0.0',
 			MID: '0.0',
 			ATT: '0.0'
-		}), _this.savePlayerData = function () {
+		});
+
+		_this.onWindowResize = function () {
+			_this.table.windowWidth = window.innerWidth;
+		};
+
+		_this.savePlayerData = function () {
 			_players2.default.saveInterfacePlayerData(_this.playerData);
-		}, _temp), _possibleConstructorReturn(_this, _ret);
+		};
+
+		_this.table = new _InterfaceTable2.default();
+
+		window.addEventListener('resize', _this.onWindowResize);
+		return _this;
 	}
 
 	_createClass(InterfacePlayer, [{
+		key: 'componentWillUnmount',
+		value: function componentWillUnmount() {
+			window.removeEventListener('resize', this.onWindowResize);
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var _this2 = this;
 
 			var player = this.props.player;
+			var index = this.props.index;
 
 			return React.createElement(
 				'div',
-				{ style: { width: '45%', height: 350, background: 'white', margin: 20, float: 'left' } },
+				{ style: {
+						width: this.table.itemWidth,
+						height: this.table.itemHeight,
+						top: this.table.top(index),
+						left: this.table.left(index),
+						background: 'white',
+						position: 'absolute',
+						transition: '1s all'
+					} },
 				React.createElement(
 					'div',
 					{ style: { float: 'left', padding: '20px 0 0 20px', width: '35%' } },
@@ -107811,6 +107905,116 @@ module.exports = function (regExp, replace) {
   };
 };
 
+
+/***/ }),
+/* 1019 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _desc, _value, _class, _descriptor; // MobX
+
+
+var _mobx = __webpack_require__(57);
+
+function _initDefineProp(target, property, descriptor, context) {
+	if (!descriptor) return;
+	Object.defineProperty(target, property, {
+		enumerable: descriptor.enumerable,
+		configurable: descriptor.configurable,
+		writable: descriptor.writable,
+		value: descriptor.initializer ? descriptor.initializer.call(context) : void 0
+	});
+}
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
+	var desc = {};
+	Object['ke' + 'ys'](descriptor).forEach(function (key) {
+		desc[key] = descriptor[key];
+	});
+	desc.enumerable = !!desc.enumerable;
+	desc.configurable = !!desc.configurable;
+
+	if ('value' in desc || desc.initializer) {
+		desc.writable = true;
+	}
+
+	desc = decorators.slice().reverse().reduce(function (desc, decorator) {
+		return decorator(target, property, desc) || desc;
+	}, desc);
+
+	if (context && desc.initializer !== void 0) {
+		desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+		desc.initializer = undefined;
+	}
+
+	if (desc.initializer === void 0) {
+		Object['define' + 'Property'](target, property, desc);
+		desc = null;
+	}
+
+	return desc;
+}
+
+function _initializerWarningHelper(descriptor, context) {
+	throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
+}
+
+var InterfaceTableModel = (_class = function () {
+	function InterfaceTableModel() {
+		_classCallCheck(this, InterfaceTableModel);
+
+		_initDefineProp(this, 'windowWidth', _descriptor, this);
+
+		this.itemHeight = 350;
+		this.itemMinWidth = 500;
+		this.itemBetweenDistance = 20;
+	}
+
+	_createClass(InterfaceTableModel, [{
+		key: 'currentRow',
+		value: function currentRow(index) {
+			return Math.ceil((index + 1) / this.itemsInRow);
+		}
+	}, {
+		key: 'top',
+		value: function top(index) {
+			return this.itemHeight * (this.currentRow(index) - 1) + this.itemBetweenDistance * this.currentRow(index);
+		}
+	}, {
+		key: 'left',
+		value: function left(index) {
+			return index % this.itemsInRow * this.itemWidth + (index % this.itemsInRow + 1) * this.itemBetweenDistance;
+		}
+	}, {
+		key: 'itemsInRow',
+		get: function get() {
+			return Math.floor((this.windowWidth - this.itemBetweenDistance * 3) / this.itemMinWidth);
+		}
+	}, {
+		key: 'itemWidth',
+		get: function get() {
+			return this.windowWidth / this.itemsInRow - this.itemBetweenDistance * (this.itemsInRow + 1);
+		}
+	}]);
+
+	return InterfaceTableModel;
+}(), (_descriptor = _applyDecoratedDescriptor(_class.prototype, 'windowWidth', [_mobx.observable], {
+	enumerable: true,
+	initializer: function initializer() {
+		return window.innerWidth;
+	}
+})), _class);
+exports.default = InterfaceTableModel;
 
 /***/ })
 /******/ ]);

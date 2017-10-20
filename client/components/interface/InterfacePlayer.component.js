@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import {action, reaction, observable, observe, computed, autorun, asStructure, runInAction, toJs } from 'mobx';
 // Models
 import playersModel from "../../models/players.model";
+import InterfaceTabelModel from "./InterfaceTable.model";
 // Components
 import InterfacePlayerChart from "./InterfacePlayerChart.component";
 
@@ -19,11 +20,29 @@ class InterfacePlayer extends React.Component {
 	});
 
 
+	constructor() {
+		super();
+		this.table = new InterfaceTabelModel();
+
+		window.addEventListener('resize', this.onWindowResize);
+	}
+
+
+	componentWillUnmount() {
+		window.removeEventListener('resize', this.onWindowResize);
+	}
+
+
 	@computed get playerData() {
 		return {
 			input: this.props.player,
 			output: this.output.toJS()
 		};
+	};
+
+
+	onWindowResize = ()=> {
+		this.table.windowWidth = window.innerWidth;
 	};
 
 
@@ -34,9 +53,18 @@ class InterfacePlayer extends React.Component {
 
 	render() {
 		const player = this.props.player;
+		const index = this.props.index;
 
 		return (
-			<div style={{ width: '45%', height: 350, background: 'white', margin: 20, float: 'left' }}>
+			<div style={{
+				width: this.table.itemWidth,
+				height: this.table.itemHeight,
+				top: this.table.top(index),
+				left: this.table.left(index),
+				background: 'white',
+				position: 'absolute',
+				transition: '1s all'
+			}}>
 				<div style={{ float: 'left', padding: '20px 0 0 20px', width: '35%' }}>
 					<p style={{ margin: '0 0 10px 0' }}>{ player.name }</p>
 					<p>age { player.age * 100 }</p>
