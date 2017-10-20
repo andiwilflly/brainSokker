@@ -28,7 +28,6 @@ class Interface extends React.Component {
 					 delete row.player.input.name;
 					 return row.player;
 				 });
-				 console.log(learnedData, 'DATA');
 				 netModel.trainNet(learnedData);
 			 },
 			 {name: 'getInterfacePlayers -> create and learn NET'}
@@ -37,7 +36,7 @@ class Interface extends React.Component {
 		 this['getTransfersPlayers -> render'] = reaction(
 			 ()=> this.currentTransfers.status === 'fulfilled',
 			 ()=> {
-				 this.sortedPlayers = playersModel.players.currentTransfers.value;
+				 this.sortedPlayers = _.take(playersModel.players.currentTransfers.value, 20);
 			 },
 			 { name: 'getInterfacePlayers -> render'}
 		 );
@@ -55,7 +54,8 @@ class Interface extends React.Component {
 
 
 	render() {
-		if(playersModel.players.currentTransfers.status !== 'fulfilled') return <p>Loading...</p>;
+		if(this.interfacePlayers.status !== 'fulfilled') return <p>Loading...</p>;
+		if(this.currentTransfers.status !== 'fulfilled') return <p>Loading...</p>;
 
 		return (
 			<div style={{ fontFamily: 'Arial' }}>

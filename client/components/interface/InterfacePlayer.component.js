@@ -3,6 +3,7 @@ import InputMask from 'react-input-mask';
 import { observer } from 'mobx-react';
 import {action, reaction, observable, observe, computed, autorun, asStructure, runInAction, toJs } from 'mobx';
 // Models
+import netModel from "../../models/net.model";
 import playersModel from "../../models/players.model";
 import InterfaceTabelModel from "./InterfaceTable.model";
 // Components
@@ -19,6 +20,8 @@ class InterfacePlayer extends React.Component {
 		ATT: '0.0'
 	});
 
+	@observable isSavingData = false;
+
 	@observable isReady = false;
 
 
@@ -27,8 +30,12 @@ class InterfacePlayer extends React.Component {
 		this.table = new InterfaceTabelModel();
 
 		window.addEventListener('resize', this.onWindowResize);
+	}
 
-		setTimeout(()=> this.isReady = true, props.index * 100);
+
+	componentDidMount() {
+		this.setNetRunData();
+		setTimeout(()=> this.isReady = true, this.props.index * 200);
 	}
 
 
@@ -36,6 +43,8 @@ class InterfacePlayer extends React.Component {
 		window.removeEventListener('resize', this.onWindowResize);
 	}
 
+
+	@computed get NET() { return netModel.NET; };
 
 	@computed get interfacePlayers() { return playersModel.players.interface; };
 
@@ -47,20 +56,38 @@ class InterfacePlayer extends React.Component {
 	};
 
 
+	interfacePlayer(name) { 
+		return _.find(this.interfacePlayers.value.toJS(), (player)=> player._id === name);
+	}
+
+
+	setNetRunData() {
+		let netRunData = _.clone(this.props.player);
+		delete netRunData.name;
+		netRunData = this.NET.run(netRunData);
+		_.forEach(netRunData, (value, name)=> this.output.set(name, +value.toFixed(1)));
+	};
+
+
 	onWindowResize = ()=> {
 		clearTimeout(this.timeout);
 		this.timeout = setTimeout(()=> this.table.windowWidth = window.innerWidth - this.table.pageScrollBar, 100);
 	};
 
 
-	savePlayerData = ()=> {
-		playersModel.saveInterfacePlayerData(this.playerData);
+	savePlayerData() {
+		this.isSavingData = true;
+		playersModel.saveInterfacePlayerData(this.playerData).then(()=> {
+			console.log('TEST?');
+			this.isSavingData = false;
+		});
 	};
 
 
 	render() {
 		const player = this.props.player;
 		const index = this.props.index;
+		const interfacePlayer = this.interfacePlayer(player.name);
 
 		if(!this.isReady) return (
 			<div style={{
@@ -104,6 +131,19 @@ class InterfacePlayer extends React.Component {
 							<p style={{ padding: '10px' }}><b>{ Math.round(player.passing * 100) }</b> (passing)</p>
 							<p style={{ padding: '10px' }}><b>{ Math.round(player.striker * 100) }</b> (striker)</p>
 						</div>
+						{ interfacePlayer ?
+							<div style={{ fontSize: 10 }}>
+								<p style={{ padding: '10px 0 0 10px' }}>Net was learned:</p>
+								<div key='5' style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid black' }}>
+									<p style={{ padding: '5px 10px' }}>GK:&nbsp;{ interfacePlayer.player.output.GK }</p>
+									<p style={{ padding: '5px 10px' }}>DEF:&nbsp;{ interfacePlayer.player.output.DEF }</p>
+									<p style={{ padding: '5px 10px' }}>MID:&nbsp;{ interfacePlayer.player.output.MID }</p>
+									<p style={{ padding: '5px 10px' }}>ATT:&nbsp;{ interfacePlayer.player.output.ATT }</p>
+								</div>
+							</div>
+							:
+							null
+						}
 					</div>
 				</div>
 
@@ -116,9 +156,10 @@ class InterfacePlayer extends React.Component {
 					display: 'flex',
 					justifyContent: 'space-between',
 					boxSizing: 'border-box',
-					width: '50%',
+					width: '70%',
 					padding: '0 20px 0 0'
 				}}>
+					<p>Net&nbsp;prediction: </p>
 					<p>
 						<span>GK</span>&nbsp;
 						<InputMask mask="9.9"
@@ -198,7 +239,9 @@ class InterfacePlayer extends React.Component {
 					background: 'rgb(61, 117, 160)',
 					outline: 'none',
 					cursor: 'pointer'
-				}} onClick={ this.savePlayerData }>Save</button>
+				}} onClick={ ()=> this.savePlayerData() }>
+					{ this.isSavingData ? 'Saving...' : 'Save' }
+				</button>
 			</div>
 		);
 	}

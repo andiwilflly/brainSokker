@@ -16762,9 +16762,8 @@ var PlayersModel = (_class = function () {
 	}, {
 		key: 'saveInterfacePlayerData',
 		value: function saveInterfacePlayerData(playerData) {
-			window.fetch('/save_interface_player_data?playerData=' + JSON.stringify(playerData), { method: "POST" }).then(function (e) {
-				console.log('save_interface_player_data SAVED');
-			});
+			console.log('SAVED: ', playerData.output);
+			return window.fetch('/save_interface_player_data?playerData=' + JSON.stringify(playerData), { method: "POST" });
 		}
 	}, {
 		key: 'getCurrentTransfersPlayers',
@@ -85453,14 +85452,13 @@ var Interface = (0, _mobxReact.observer)(_class = (_class2 = function (_React$Co
 					delete row.player.input.name;
 					return row.player;
 				});
-				console.log(learnedData, 'DATA');
 				_net2.default.trainNet(learnedData);
 			}, { name: 'getInterfacePlayers -> create and learn NET' });
 
 			this['getTransfersPlayers -> render'] = (0, _mobx.reaction)(function () {
 				return _this2.currentTransfers.status === 'fulfilled';
 			}, function () {
-				_this2.sortedPlayers = _players2.default.players.currentTransfers.value;
+				_this2.sortedPlayers = _.take(_players2.default.players.currentTransfers.value, 20);
 			}, { name: 'getInterfacePlayers -> render' });
 		}
 	}, {
@@ -85468,7 +85466,12 @@ var Interface = (0, _mobxReact.observer)(_class = (_class2 = function (_React$Co
 		value: function render() {
 			var _this3 = this;
 
-			if (_players2.default.players.currentTransfers.status !== 'fulfilled') return React.createElement(
+			if (this.interfacePlayers.status !== 'fulfilled') return React.createElement(
+				'p',
+				null,
+				'Loading...'
+			);
+			if (this.currentTransfers.status !== 'fulfilled') return React.createElement(
 				'p',
 				null,
 				'Loading...'
@@ -85546,7 +85549,7 @@ exports.default = Interface;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(React) {
+/* WEBPACK VAR INJECTION */(function(React, _) {
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
@@ -85554,7 +85557,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _class, _desc, _value, _class2, _descriptor;
+var _class, _desc, _value, _class2, _descriptor, _descriptor2;
 // MobX
 
 // Models
@@ -85569,6 +85572,10 @@ var _reactInputMask2 = _interopRequireDefault(_reactInputMask);
 var _mobxReact = __webpack_require__(91);
 
 var _mobx = __webpack_require__(45);
+
+var _net = __webpack_require__(136);
+
+var _net2 = _interopRequireDefault(_net);
 
 var _players = __webpack_require__(111);
 
@@ -85648,7 +85655,9 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 			ATT: '0.0'
 		});
 
-		_initDefineProp(_this, 'isReady', _descriptor, _this);
+		_initDefineProp(_this, 'isSavingData', _descriptor, _this);
+
+		_initDefineProp(_this, 'isReady', _descriptor2, _this);
 
 		_this.onWindowResize = function () {
 			clearTimeout(_this.timeout);
@@ -85657,32 +85666,65 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 			}, 100);
 		};
 
-		_this.savePlayerData = function () {
-			_players2.default.saveInterfacePlayerData(_this.playerData);
-		};
-
 		_this.table = new _InterfaceTable2.default();
 
 		window.addEventListener('resize', _this.onWindowResize);
-
-		setTimeout(function () {
-			return _this.isReady = true;
-		}, props.index * 100);
 		return _this;
 	}
 
 	_createClass(InterfacePlayer, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			var _this2 = this;
+
+			this.setNetRunData();
+			setTimeout(function () {
+				return _this2.isReady = true;
+			}, this.props.index * 200);
+		}
+	}, {
 		key: 'componentWillUnmount',
 		value: function componentWillUnmount() {
 			window.removeEventListener('resize', this.onWindowResize);
 		}
 	}, {
+		key: 'interfacePlayer',
+		value: function interfacePlayer(name) {
+			return _.find(this.interfacePlayers.value.toJS(), function (player) {
+				return player._id === name;
+			});
+		}
+	}, {
+		key: 'setNetRunData',
+		value: function setNetRunData() {
+			var _this3 = this;
+
+			var netRunData = _.clone(this.props.player);
+			delete netRunData.name;
+			netRunData = this.NET.run(netRunData);
+			_.forEach(netRunData, function (value, name) {
+				return _this3.output.set(name, +value.toFixed(1));
+			});
+		}
+	}, {
+		key: 'savePlayerData',
+		value: function savePlayerData() {
+			var _this4 = this;
+
+			this.isSavingData = true;
+			_players2.default.saveInterfacePlayerData(this.playerData).then(function () {
+				console.log('TEST?');
+				_this4.isSavingData = false;
+			});
+		}
+	}, {
 		key: 'render',
 		value: function render() {
-			var _this2 = this;
+			var _this5 = this;
 
 			var player = this.props.player;
 			var index = this.props.index;
+			var interfacePlayer = this.interfacePlayer(player.name);
 
 			if (!this.isReady) return React.createElement('div', { style: {
 					width: this.table.itemWidth,
@@ -85816,7 +85858,44 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 								),
 								' (striker)'
 							)
-						)
+						),
+						interfacePlayer ? React.createElement(
+							'div',
+							{ style: { fontSize: 10 } },
+							React.createElement(
+								'p',
+								{ style: { padding: '10px 0 0 10px' } },
+								'Net was learned:'
+							),
+							React.createElement(
+								'div',
+								{ key: '5', style: { display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid black' } },
+								React.createElement(
+									'p',
+									{ style: { padding: '5px 10px' } },
+									'GK:\xA0',
+									interfacePlayer.player.output.GK
+								),
+								React.createElement(
+									'p',
+									{ style: { padding: '5px 10px' } },
+									'DEF:\xA0',
+									interfacePlayer.player.output.DEF
+								),
+								React.createElement(
+									'p',
+									{ style: { padding: '5px 10px' } },
+									'MID:\xA0',
+									interfacePlayer.player.output.MID
+								),
+								React.createElement(
+									'p',
+									{ style: { padding: '5px 10px' } },
+									'ATT:\xA0',
+									interfacePlayer.player.output.ATT
+								)
+							)
+						) : null
 					)
 				),
 				React.createElement(
@@ -85831,9 +85910,14 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 							display: 'flex',
 							justifyContent: 'space-between',
 							boxSizing: 'border-box',
-							width: '50%',
+							width: '70%',
 							padding: '0 20px 0 0'
 						} },
+					React.createElement(
+						'p',
+						null,
+						'Net\xA0prediction: '
+					),
 					React.createElement(
 						'p',
 						null,
@@ -85848,7 +85932,7 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 							alwaysShowMask: true,
 							value: this.output.get('GK'),
 							onChange: function onChange(e) {
-								return _this2.output.set('GK', e.currentTarget.value);
+								return _this5.output.set('GK', e.currentTarget.value);
 							},
 							style: {
 								outline: 'none',
@@ -85874,7 +85958,7 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 							alwaysShowMask: true,
 							value: this.output.get('DEF'),
 							onChange: function onChange(e) {
-								return _this2.output.set('DEF', e.currentTarget.value);
+								return _this5.output.set('DEF', e.currentTarget.value);
 							},
 							style: {
 								outline: 'none',
@@ -85900,7 +85984,7 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 							alwaysShowMask: true,
 							value: this.output.get('MID'),
 							onChange: function onChange(e) {
-								return _this2.output.set('MID', e.currentTarget.value);
+								return _this5.output.set('MID', e.currentTarget.value);
 							},
 							style: {
 								outline: 'none',
@@ -85926,7 +86010,7 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 							alwaysShowMask: true,
 							value: this.output.get('ATT'),
 							onChange: function onChange(e) {
-								return _this2.output.set('ATT', e.currentTarget.value);
+								return _this5.output.set('ATT', e.currentTarget.value);
 							},
 							style: {
 								outline: 'none',
@@ -85950,10 +86034,17 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 							background: 'rgb(61, 117, 160)',
 							outline: 'none',
 							cursor: 'pointer'
-						}, onClick: this.savePlayerData },
-					'Save'
+						}, onClick: function onClick() {
+							return _this5.savePlayerData();
+						} },
+					this.isSavingData ? 'Saving...' : 'Save'
 				)
 			);
+		}
+	}, {
+		key: 'NET',
+		get: function get() {
+			return _net2.default.NET;
 		}
 	}, {
 		key: 'interfacePlayers',
@@ -85971,15 +86062,20 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 	}]);
 
 	return InterfacePlayer;
-}(React.Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'isReady', [_mobx.observable], {
+}(React.Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, 'isSavingData', [_mobx.observable], {
 	enumerable: true,
 	initializer: function initializer() {
 		return false;
 	}
-}), _applyDecoratedDescriptor(_class2.prototype, 'interfacePlayers', [_mobx.computed], Object.getOwnPropertyDescriptor(_class2.prototype, 'interfacePlayers'), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, 'playerData', [_mobx.computed], Object.getOwnPropertyDescriptor(_class2.prototype, 'playerData'), _class2.prototype)), _class2)) || _class;
+}), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, 'isReady', [_mobx.observable], {
+	enumerable: true,
+	initializer: function initializer() {
+		return false;
+	}
+}), _applyDecoratedDescriptor(_class2.prototype, 'NET', [_mobx.computed], Object.getOwnPropertyDescriptor(_class2.prototype, 'NET'), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, 'interfacePlayers', [_mobx.computed], Object.getOwnPropertyDescriptor(_class2.prototype, 'interfacePlayers'), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, 'playerData', [_mobx.computed], Object.getOwnPropertyDescriptor(_class2.prototype, 'playerData'), _class2.prototype)), _class2)) || _class;
 
 exports.default = InterfacePlayer;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(112)))
 
 /***/ }),
 /* 499 */
@@ -87105,7 +87201,7 @@ var InterfacePlayerChart = (0, _mobxReact.observer)(_class = (_class2 = function
 			var sy = cy + (outerRadius + 10) * sin;
 			var mx = cx + (outerRadius + 30) * cos;
 			var my = cy + (outerRadius + 30) * sin;
-			var ex = mx + (cos >= 0 ? 1 : -1) * 11;
+			var ex = mx + (cos >= 0 ? 1 : -1) * 6;
 			var ey = my;
 			var textAnchor = cos >= 0 ? 'start' : 'end';
 
