@@ -2,9 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const Express = require('express');
 const React = require('react');
-const learnedRoute = require('./server/routes/learned.get.route');
+const interfacePlayersRoute = require('./server/routes/interface_players.get.route');
 const currentTransfers = require('./server/routes/currentTransfers.get.route');
-const learnSavePlayerRoute = require('./server/routes/learn_save_player.post.route');
 const saveInterfacePlayerData = require('./server/routes/save_interface_player_data.post.route');
 
 
@@ -20,11 +19,10 @@ MongoClient.connect("mongodb://andiwillfly:ward121314@ds127854.mlab.com:27854/ne
 	// Serve normal requests with our handleRender function
 	app.use('/static', Express.static(path.join(__dirname, './static')));
 
-	app.use('/learned', (req, res)=> learnedRoute(DB, req, res) );
+
+	app.use('/interface_players', (req, res)=> interfacePlayersRoute(DB, req, res) );
 
 	app.use('/current_transfers', (req, res)=> currentTransfers(DB, req, res) );
-
-	app.post('/learn_save_player', (req, res)=> learnSavePlayerRoute(DB, req, res) );
 
 	app.post('/save_interface_player_data', (req, res)=> saveInterfacePlayerData(DB, req, res) );
 

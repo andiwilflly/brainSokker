@@ -16743,18 +16743,18 @@ var PlayersModel = (_class = function () {
 	}
 
 	_createClass(PlayersModel, [{
-		key: 'getTrainPlayers',
-		value: function getTrainPlayers() {
+		key: 'getInterfacePlayers',
+		value: function getInterfacePlayers() {
 			var _this = this;
 
-			window.fetch('/learned').then(function (trainPlayers) {
-				return trainPlayers.json();
-			}).then(function (trainPlayers) {
-				(0, _mobx.runInAction)('PLAYERS-GET-TRAIN-PLAYERS-SUCCESS', function () {
-					_this.players.train.status = 'fulfilled';
-					_.forEach(trainPlayers, function (player) {
-						player.player.output.position = player.player.output.position || '';
-						_this.players.train.value.set(player._id, player);
+			window.fetch('/interface_players').then(function (interfacePlayers) {
+				return interfacePlayers.json();
+			}).then(function (interfacePlayers) {
+				(0, _mobx.runInAction)('PLAYERS-GET-INTERFACE-PLAYERS-SUCCESS', function () {
+					_this.players.interface.status = 'fulfilled';
+					console.log('interface', interfacePlayers);
+					_.forEach(interfacePlayers, function (player) {
+						_this.players.interface.value.set(player._id, player);
 					});
 				});
 			});
@@ -16767,57 +16767,16 @@ var PlayersModel = (_class = function () {
 			});
 		}
 	}, {
-		key: 'saveTrainPlayer',
-		value: function saveTrainPlayer(playerData) {
-
-			var player = JSON.stringify({
-				input: playerData.player.input,
-				output: {
-					quality: playerData.player.output.quality,
-					position: playerData.player.output.position
-				}
-			});
-			window.fetch('/learn_save_player?player=' + player, { method: "POST" }).then(function (e) {
-				console.log('SAVED');
-			});
-		}
-	}, {
-		key: 'changeTrainPlayerQuality',
-		value: function changeTrainPlayerQuality(playerName, quality) {
-			var _this2 = this;
-
-			var currentPlayer = this.players.train.value.get(playerName);
-			if (!currentPlayer) return (0, _mobx.runInAction)('PLAYERS-CHANGE-TRAIN-PLAYER-QUALITY-ERROR ' + playerName, function () {});
-
-			(0, _mobx.runInAction)('PLAYERS-CHANGE-TRAIN-PLAYER-QUALITY-SUCCESS ' + playerName, function () {
-				currentPlayer.player.output.quality = quality;
-				_this2.players.train.value.set(playerName, currentPlayer);
-			});
-		}
-	}, {
-		key: 'changeTrainPlayerPosition',
-		value: function changeTrainPlayerPosition(playerName, position) {
-			var _this3 = this;
-
-			var currentPlayer = this.players.train.value.get(playerName);
-			if (!currentPlayer) return (0, _mobx.runInAction)('PLAYERS-CHANGE-TRAIN-PLAYER-POSITION-ERROR ' + playerName, function () {});
-
-			(0, _mobx.runInAction)('PLAYERS-CHANGE-TRAIN-PLAYER-POSITION-SUCCESS ' + playerName, function () {
-				currentPlayer.player.output.position = position;
-				_this3.players.train.value.set(playerName, currentPlayer);
-			});
-		}
-	}, {
 		key: 'getCurrentTransfersPlayers',
 		value: function getCurrentTransfersPlayers() {
-			var _this4 = this;
+			var _this2 = this;
 
 			window.fetch('/current_transfers').then(function (currentTransfersPlayers) {
 				return currentTransfersPlayers.json();
 			}).then(function (currentTransfersPlayers) {
 				(0, _mobx.runInAction)('PLAYERS-GET-CURRENT-TRANSFERS-PLAYERS-SUCCESS', function () {
-					_this4.players.currentTransfers.status = 'fulfilled';
-					_this4.players.currentTransfers.value = currentTransfersPlayers;
+					_this2.players.currentTransfers.status = 'fulfilled';
+					_this2.players.currentTransfers.value = currentTransfersPlayers;
 
 					var formattedPlayers = {};
 					_.forEach(currentTransfersPlayers, function (player) {
@@ -16829,7 +16788,7 @@ var PlayersModel = (_class = function () {
 						formattedPlayers[player.name] = formattedPlayer;
 					});
 
-					_this4.players.currentTransfers.formatted = formattedPlayers;
+					_this2.players.currentTransfers.formatted = formattedPlayers;
 				});
 			});
 		}
@@ -16840,7 +16799,7 @@ var PlayersModel = (_class = function () {
 	enumerable: true,
 	initializer: function initializer() {
 		return {
-			train: {
+			interface: {
 				status: 'pending',
 				value: _mobx.observable.map()
 			},
@@ -83380,7 +83339,7 @@ var App = (0, _mobxReact.observer)(_class = (_class2 = function (_React$Componen
 	_createClass(App, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			_players2.default.getTrainPlayers();
+			//playersModel.getTrainPlayers();
 			_players2.default.getCurrentTransfersPlayers();
 
 			// this['getTrainPlayers -> create NET'] = reaction(
@@ -85466,17 +85425,16 @@ var Interface = (0, _mobxReact.observer)(_class = (_class2 = function (_React$Co
 	_inherits(Interface, _React$Component);
 
 	function Interface() {
-		var _ref;
-
-		var _temp, _this, _ret;
-
 		_classCallCheck(this, Interface);
 
-		for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-			args[_key] = arguments[_key];
-		}
+		var _this = _possibleConstructorReturn(this, (Interface.__proto__ || Object.getPrototypeOf(Interface)).call(this));
 
-		return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Interface.__proto__ || Object.getPrototypeOf(Interface)).call.apply(_ref, [this].concat(args))), _this), _initDefineProp(_this, 'sortedPlayers', _descriptor, _this), _initDefineProp(_this, 'sortBy', _descriptor2, _this), _temp), _possibleConstructorReturn(_this, _ret);
+		_initDefineProp(_this, 'sortedPlayers', _descriptor, _this);
+
+		_initDefineProp(_this, 'sortBy', _descriptor2, _this);
+
+		_players2.default.getInterfacePlayers();
+		return _this;
 	}
 
 	_createClass(Interface, [{
@@ -85678,7 +85636,7 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 
 		setTimeout(function () {
 			return _this.isReady = true;
-		}, props.index * 300);
+		}, props.index * 100);
 		return _this;
 	}
 
@@ -85712,12 +85670,12 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 						top: this.table.top(index),
 						left: this.table.left(index),
 						background: 'white',
-						position: 'absolute'
-						// transition: '1s all'
+						position: 'absolute',
+						transition: '1s background'
 					} },
 				React.createElement(
 					'div',
-					{ style: { float: 'left', padding: '20px 0 0 20px', width: '35%' } },
+					{ style: { float: 'left', padding: '20px 0 0 20px', width: 'calc(45% - 20px)' } },
 					React.createElement(
 						'p',
 						{ style: { margin: '0 0 10px 0' } },
@@ -85731,20 +85689,28 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 					),
 					React.createElement(
 						'div',
-						{ style: { fontSize: '14px', margin: '35px 0 0 0' } },
+						{ style: { fontSize: '12px', margin: '35px 0 0 0' } },
 						React.createElement(
 							'div',
 							{ key: '1', style: { display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid black' } },
 							React.createElement(
 								'p',
 								{ style: { padding: '10px' } },
-								Math.round(player.stamina * 100),
+								React.createElement(
+									'b',
+									null,
+									Math.round(player.stamina * 100)
+								),
 								' (stamina)'
 							),
 							React.createElement(
 								'p',
 								{ style: { padding: '10px' } },
-								Math.round(player.keeper * 100),
+								React.createElement(
+									'b',
+									null,
+									Math.round(player.keeper * 100)
+								),
 								' (keeper)'
 							)
 						),
@@ -85754,13 +85720,21 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 							React.createElement(
 								'p',
 								{ style: { padding: '10px' } },
-								Math.round(player.pace * 100),
+								React.createElement(
+									'b',
+									null,
+									Math.round(player.pace * 100)
+								),
 								' (pace)'
 							),
 							React.createElement(
 								'p',
 								{ style: { padding: '10px' } },
-								Math.round(player.defender * 100),
+								React.createElement(
+									'b',
+									null,
+									Math.round(player.defender * 100)
+								),
 								' (defender)'
 							)
 						),
@@ -85770,13 +85744,21 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 							React.createElement(
 								'p',
 								{ style: { padding: '10px' } },
-								Math.round(player.technique * 100),
+								React.createElement(
+									'b',
+									null,
+									Math.round(player.technique * 100)
+								),
 								' (technique)'
 							),
 							React.createElement(
 								'p',
 								{ style: { padding: '10px' } },
-								Math.round(player.playmaker * 100),
+								React.createElement(
+									'b',
+									null,
+									Math.round(player.playmaker * 100)
+								),
 								' (playmaker)'
 							)
 						),
@@ -85786,13 +85768,21 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 							React.createElement(
 								'p',
 								{ style: { padding: '10px' } },
-								Math.round(player.passing * 100),
+								React.createElement(
+									'b',
+									null,
+									Math.round(player.passing * 100)
+								),
 								' (passing)'
 							),
 							React.createElement(
 								'p',
 								{ style: { padding: '10px' } },
-								Math.round(player.striker * 100),
+								React.createElement(
+									'b',
+									null,
+									Math.round(player.striker * 100)
+								),
 								' (striker)'
 							)
 						)
@@ -85800,7 +85790,7 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 				),
 				React.createElement(
 					'div',
-					{ style: { float: 'right', width: '60%', height: 280, marginTop: 20 } },
+					{ style: { float: 'right', width: '55%', height: 280, marginTop: 20 } },
 					React.createElement(_InterfacePlayerChart2.default, { playerData: this.playerData })
 				),
 				React.createElement(
@@ -87079,7 +87069,7 @@ var InterfacePlayerChart = (0, _mobxReact.observer)(_class = (_class2 = function
 			var sy = cy + (outerRadius + 10) * sin;
 			var mx = cx + (outerRadius + 30) * cos;
 			var my = cy + (outerRadius + 30) * sin;
-			var ex = mx + (cos >= 0 ? 1 : -1) * 22;
+			var ex = mx + (cos >= 0 ? 1 : -1) * 11;
 			var ey = my;
 			var textAnchor = cos >= 0 ? 'start' : 'end';
 

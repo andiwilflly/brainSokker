@@ -5,7 +5,7 @@ import {action, reaction, observable, extendObservable, observe, computed, autor
 class PlayersModel {
 
 	@observable players = {
-		train: {
+		interface: {
 			status: 'pending',
 			value: observable.map()
 		},
@@ -17,17 +17,16 @@ class PlayersModel {
 	};
 
 
-	getTrainPlayers() {
-		window.fetch('/learned')
-			.then((trainPlayers)=> trainPlayers.json())
-			.then((trainPlayers)=> {
-				runInAction(`PLAYERS-GET-TRAIN-PLAYERS-SUCCESS`, ()=> {
-					this.players.train.status = 'fulfilled';
-					_.forEach(trainPlayers, (player)=> {
-						player.player.output.position = player.player.output.position || '';
-						this.players.train.value.set(player._id, player);
+	getInterfacePlayers() {
+		window.fetch('/interface_players')
+			.then((interfacePlayers)=> interfacePlayers.json())
+			.then((interfacePlayers)=> {
+				runInAction(`PLAYERS-GET-INTERFACE-PLAYERS-SUCCESS`, ()=> {
+					this.players.interface.status = 'fulfilled';
+					console.log('interface', interfacePlayers);
+					_.forEach(interfacePlayers, (player)=> {
+						this.players.interface.value.set(player._id, player);
 					});
-
 				});
 			});
 	}
@@ -37,44 +36,6 @@ class PlayersModel {
 		window.fetch(`/save_interface_player_data?playerData=${JSON.stringify(playerData)}`,
 			{ method: "POST" }).then((e)=> {
 			console.log('save_interface_player_data SAVED');
-		});
-	}
-
-
-	saveTrainPlayer(playerData) {
-		
-		const player = JSON.stringify({
-			input: playerData.player.input,
-			output: {
-				quality: playerData.player.output.quality,
-				position: playerData.player.output.position
-			}
-		});
-		window.fetch(`/learn_save_player?player=${player}`,
-			{ method: "POST" }).then((e)=> {
-				console.log('SAVED');
-		});
-	}
-
-
-	changeTrainPlayerQuality(playerName, quality) {
-		let currentPlayer = this.players.train.value.get(playerName);
-		if(!currentPlayer) return runInAction(`PLAYERS-CHANGE-TRAIN-PLAYER-QUALITY-ERROR ${playerName}`, ()=> {});
-
-		runInAction(`PLAYERS-CHANGE-TRAIN-PLAYER-QUALITY-SUCCESS ${playerName}`, ()=> {
-			currentPlayer.player.output.quality = quality;
-			this.players.train.value.set(playerName, currentPlayer);
-		});
-	}
-
-
-	changeTrainPlayerPosition(playerName, position) {
-		let currentPlayer = this.players.train.value.get(playerName);
-		if(!currentPlayer) return runInAction(`PLAYERS-CHANGE-TRAIN-PLAYER-POSITION-ERROR ${playerName}`, ()=> {});
-
-		runInAction(`PLAYERS-CHANGE-TRAIN-PLAYER-POSITION-SUCCESS ${playerName}`, ()=> {
-			currentPlayer.player.output.position = position;
-			this.players.train.value.set(playerName, currentPlayer);
 		});
 	}
 

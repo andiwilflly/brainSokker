@@ -28,7 +28,7 @@ class InterfacePlayer extends React.Component {
 
 		window.addEventListener('resize', this.onWindowResize);
 
-		setTimeout(()=> this.isReady = true, props.index * 300);
+		setTimeout(()=> this.isReady = true, props.index * 100);
 	}
 
 
@@ -79,33 +79,33 @@ class InterfacePlayer extends React.Component {
 				left: this.table.left(index),
 				background: 'white',
 				position: 'absolute',
-				// transition: '1s all'
+				transition: '1s background'
 			}}>
-				<div style={{ float: 'left', padding: '20px 0 0 20px', width: '35%' }}>
+				<div style={{ float: 'left', padding: '20px 0 0 20px', width: 'calc(45% - 20px)' }}>
 					<p style={{ margin: '0 0 10px 0' }}>{ player.name }</p>
 					<p>age { player.age * 100 }</p>
 
-					<div style={{ fontSize: '14px', margin: '35px 0 0 0' }}>
+					<div style={{ fontSize: '12px', margin: '35px 0 0 0' }}>
 						<div key='1' style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid black' }}>
-							<p style={{ padding: '10px' }}>{ Math.round(player.stamina * 100) } (stamina)</p>
-							<p style={{ padding: '10px' }}>{ Math.round(player.keeper * 100) } (keeper)</p>
+							<p style={{ padding: '10px' }}><b>{ Math.round(player.stamina * 100) }</b> (stamina)</p>
+							<p style={{ padding: '10px' }}><b>{ Math.round(player.keeper * 100) }</b> (keeper)</p>
 						</div>
 						<div key='2' style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid black' }}>
-							<p style={{ padding: '10px' }}>{ Math.round(player.pace * 100) } (pace)</p>
-							<p style={{ padding: '10px' }}>{ Math.round(player.defender * 100) } (defender)</p>
+							<p style={{ padding: '10px' }}><b>{ Math.round(player.pace * 100) }</b> (pace)</p>
+							<p style={{ padding: '10px' }}><b>{ Math.round(player.defender * 100) }</b> (defender)</p>
 						</div>
 						<div key='3' style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid black' }}>
-							<p style={{ padding: '10px' }}>{ Math.round(player.technique * 100) } (technique)</p>
-							<p style={{ padding: '10px' }}>{ Math.round(player.playmaker * 100) } (playmaker)</p>
+							<p style={{ padding: '10px' }}><b>{ Math.round(player.technique * 100) }</b> (technique)</p>
+							<p style={{ padding: '10px' }}><b>{ Math.round(player.playmaker * 100) }</b> (playmaker)</p>
 						</div>
 						<div key='4' style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid black' }}>
-							<p style={{ padding: '10px' }}>{ Math.round(player.passing * 100) } (passing)</p>
-							<p style={{ padding: '10px' }}>{ Math.round(player.striker * 100) } (striker)</p>
+							<p style={{ padding: '10px' }}><b>{ Math.round(player.passing * 100) }</b> (passing)</p>
+							<p style={{ padding: '10px' }}><b>{ Math.round(player.striker * 100) }</b> (striker)</p>
 						</div>
 					</div>
 				</div>
 
-				<div style={{ float: 'right', width: '60%', height: 280, marginTop: 20 }}>
+				<div style={{ float: 'right', width: '55%', height: 280, marginTop: 20 }}>
 					<InterfacePlayerChart playerData={ this.playerData } />
 				</div>
 

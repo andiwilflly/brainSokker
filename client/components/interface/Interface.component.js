@@ -13,6 +13,12 @@ import InterfacePlayer from "./InterfacePlayer.component";
 class Interface extends React.Component {
 
 
+	constructor() {
+		super();
+		playersModel.getInterfacePlayers();
+	}
+
+
 	@observable sortedPlayers = _.take(playersModel.players.currentTransfers.value, 50);
 
 	@observable sortBy = '';

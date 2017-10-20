@@ -31,7 +31,7 @@ class App extends React.Component {
 
 
 	componentDidMount() {
-		playersModel.getTrainPlayers();
+		//playersModel.getTrainPlayers();
 		playersModel.getCurrentTransfersPlayers();
 
 		// this['getTrainPlayers -> create NET'] = reaction(
