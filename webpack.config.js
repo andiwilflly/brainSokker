@@ -5,6 +5,7 @@ const nodeExternals = require('webpack-node-externals');
 
 // @RUN: node_modules/.bin/webpack-dev-server
 const config = {
+	name: 'client',
 	node: {
 		fs: 'empty' // https://github.com/josephsavona/valuable/issues/9
 	},
@@ -99,4 +100,4 @@ const serverConfig = {
 };
 
 
-module.exports = [config, serverConfig];
+module.exports = config;

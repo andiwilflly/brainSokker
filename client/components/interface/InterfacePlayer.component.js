@@ -98,7 +98,6 @@ class InterfacePlayer extends React.Component {
 		const index = this.props.index;
 		const interfacePlayer = this.interfacePlayer(player.name);
 
-		if(player.name === 'Patrik Dugovics') console.log('rener!2', this.output.get('ATT'));
 		if(!this.isReady) return (
 			<div style={{
 				width: this.table.itemWidth,
