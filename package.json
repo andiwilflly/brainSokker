@@ -1,6 +1,6 @@
 {
 	"scripts": {
-		"start": "node index.js"
+		"start": "node server_dev.js"
 	},
 	"dependencies": {
 		"babel": "^6.23.0",
