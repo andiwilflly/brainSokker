@@ -2,19 +2,18 @@ const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 
-
+// 🍕
 // @RUN: node_modules/.bin/webpack-dev-server
 const config = {
 	name: 'client',
 	node: {
-		fs: 'empty' // https://github.com/josephsavona/valuable/issues/9
+		fs: 'empty' // https://github.com/josephsavona/valuable/issues/
 	},
 	entry: [
-		'webpack-dev-server/client?http://localhost:8080',
 		'./client/index.js'
 	],
 	output: {
-		path: path.join(__dirname, "built"), // This is where images AND js will go
+		path: path.join(__dirname, "./built"), // This is where images AND js will go
 		filename: 'index.js'
 	},
 	stats: {
@@ -48,8 +47,8 @@ const config = {
 		new webpack.ProvidePlugin({
 			'React':  'react',
 			'_':      'lodash'
-		})
-		// new webpack.HotModuleReplacementPlugin(),
+		}),
+		new webpack.HotModuleReplacementPlugin(),
 		// new webpack.NoEmitOnErrorsPlugin(),
 		// new webpack.DefinePlugin({
 		// 	'process.env.NODE_ENV': '"production"'

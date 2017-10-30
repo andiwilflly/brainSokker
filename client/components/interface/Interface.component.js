@@ -24,7 +24,7 @@ class Interface extends React.Component {
 		 this['@reaction getInterfacePlayers -> create and learn NET'] = reaction(
 			 ()=> this.interfacePlayers.status === 'fulfilled',
 			 ()=> {
-				 let learnedData = _.map(this.interfacePlayers.value.toJS(), (row) => {
+				 let learnedData = _.map(this.interfacePlayers.value.toJS(), (row)=> {
 					 delete row.player.input.name;
 					 return row.player;
 				 });
@@ -36,7 +36,7 @@ class Interface extends React.Component {
 		 this['@reaction getTransfersPlayers -> render'] = reaction(
 			 ()=> this.currentTransfers.status === 'fulfilled',
 			 ()=> {
-				 this.sortedPlayers = _.take(playersModel.players.currentTransfers.value, 20);
+				 this.sortedPlayers = playersModel.players.currentTransfers.value;
 			 },
 			 { name: '@reaction getInterfacePlayers -> render'}
 		 );

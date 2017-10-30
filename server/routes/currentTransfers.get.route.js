@@ -23,7 +23,7 @@ function currentTransfers(DB, req, res) {
 	// 	if(response.statusCode === 302 && response.headers && response.headers.location) {
 	// 		let promisePlayersDataArray = [];
 	//
-	// 		for(let page in Array.from({ length: 10 }, (v, k) => k)) {
+	// 		for(let page in Array.from({ length: 4 }, (v, k) => k)) {
 	// 			promisePlayersDataArray.push(new Promise((resolve, reject)=> {
 	//
 	// 				request(`http://sokker.org/transferSearch/pg/${page+1}`, (error, response, body)=> {
@@ -75,43 +75,3 @@ function currentTransfers(DB, req, res) {
 
 
 module.exports = currentTransfers;
-
-// notifierMax=103404315;
-// conf=909818678;
-// __atssc=vk%3B1;
-// PHPSESSID=bslq3i47psasj6st2kj3gdjgs6;
-// XMLSESSID=r8vobqb3hiusvnoafe3a831hr6;
-// hide_promotion=1;
-// notifierMax=103404315;
-// __utmt=1;
-// lang=uk;
-// lang_ID=32;
-// _html_rtl=0;
-// __utma=20776890.394479188.1478085449.1506600483.1506605750.423;
-// __utmb=20776890.61.10.1506605750;
-// __utmc=20776890;
-// __utmz=20776890.1506605750.423.3.utmcsr=online.sokker.org|utmccn=(referral)|utmcmd=referral|utmcct=/;
-// __utmv=20776890.|1=skin=default=1^2=background=stadium=1^3=menu-position=bottom=1;
-// __atuvc=15%7C35%2C23%7C36%2C0%7C37%2C4%7C38%2C16%7C39;
-// __atuvs=59ccfab53e2ac561009
-
-
-
-
-// conf=909818678;
-// __atssc=vk%3B1;
-// PHPSESSID=bslq3i47psasj6st2kj3gdjgs6;
-// XMLSESSID=r8vobqb3hiusvnoafe3a831hr6;
-// hide_promotion=1;
-// notifierMax=103404315;
-// lang=uk;
-// lang_ID=32;
-// _html_rtl=0;
-// __atuvc=15%7C35%2C23%7C36%2C0%7C37%2C4%7C38%2C15%7C39;
-// __atuvs=59ccfab53e2ac561008;
-// __utmt=1;
-// __utma=20776890.394479188.1478085449.1506600483.1506605750.423;
-// __utmb=20776890.60.10.1506605750;
-// __utmc=20776890;
-// __utmz=20776890.1506605750.423.3.utmcsr=online.sokker.org|utmccn=(referral)|utmcmd=referral|utmcct=/;
-// __utmv=20776890.|1=skin=default=1^2=background=stadium=1^3=menu-position=bottom=1

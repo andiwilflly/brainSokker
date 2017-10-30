@@ -15,19 +15,6 @@ const data01 = [
 	{ name: 'ATT', value: 1 }
 ];
 
-const player = {
-	"name": "Miltos Kotsou",
-	"age": 0.35,
-	"stamina": 0.11,
-	"keeper": 0,
-	"pace": 0.14,
-	"defender": 0.11,
-	"technique": 0.08,
-	"playmaker": 0.06,
-	"passing": 0.08,
-	"striker": 0.07
-};
-
 
 @observer
 class InterfacePlayerChart extends React.Component {
@@ -35,9 +22,9 @@ class InterfacePlayerChart extends React.Component {
 	@observable activeIndex = -1;
 
 
-	get chartData() {
-		return _.map(this.props.playerData.output, (value, name)=> ({ name, value: +value }))
-	};
+	get chartData() { return _.map(this.props.playerData.output, (value, name)=> ({ name, value: +value })) };
+
+	get chartSize() { return Math.max(..._.map(this.chartData, (prop)=> prop.value)) * 80; };
 
 
 	renderActiveShape = (props)=> {
@@ -77,7 +64,7 @@ class InterfacePlayerChart extends React.Component {
 				<path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none"/>
 				<circle cx={ex} cy={ey} r={2} fill={fill} stroke="none"/>
 				<text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">
-					{ `${payload.name}` }
+					{ `${payload.name} / ${payload.value}` }
 				</text>
 				{/*<text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#333">
 					{`${payload.value}`}
@@ -105,7 +92,7 @@ class InterfacePlayerChart extends React.Component {
 						 cx={'50%'}
 						 cy={'50%'}
 						 innerRadius={0}
-						 outerRadius={70}>
+						 outerRadius={ this.chartSize > 100 ? 100 : this.chartSize }>
 						{ data01.map((entry, index)=> (
 							<Cell key={`slice-${index}`} fill={colors[index % 10]} />
 						)) }

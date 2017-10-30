@@ -8,6 +8,7 @@ import playersModel from "../../models/players.model";
 import InterfaceTabelModel from "./InterfaceTable.model";
 // Components
 import InterfacePlayerChart from "./InterfacePlayerChart.component";
+import InterfacePlayerBars from "./InterfacePlayerBars.component";
 
 
 @observer
@@ -119,9 +120,9 @@ class InterfacePlayer extends React.Component {
 				position: 'absolute',
 				transition: '1s background'
 			}}>
-				<div style={{ float: 'left', padding: '20px 0 0 20px', width: 'calc(45% - 20px)' }}>
+				<div style={{ float: 'left', padding: '20px 0 0 20px', width: 'calc(40% - 20px)' }}>
 					<p style={{ margin: '0 0 10px 0' }}>{ player.name }</p>
-					<p>age { player.age * 100 }</p>
+					<p>age { Math.round(player.age * 100) }</p>
 
 					<div style={{ fontSize: '12px', margin: '35px 0 0 0' }}>
 						<div key='1' style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid black' }}>
@@ -156,8 +157,9 @@ class InterfacePlayer extends React.Component {
 					</div>
 				</div>
 
-				<div style={{ float: 'right', width: '55%', height: 280, marginTop: 20 }}>
+				<div style={{ float: 'right', width: '60%', height: 280, marginTop: 20 }}>
 					<InterfacePlayerChart playerData={ this.playerData } />
+					{/*<InterfacePlayerBars playerData={ this.playerData } />*/}
 				</div>
 
 				<div style={{
