@@ -14,7 +14,7 @@ MongoClient.connect("mongodb://andiwillfly:ward121314@ds127854.mlab.com:27854/ne
 
 	const app = Express();
 	// Serve built files with express static files middleware
-	app.use('/built', Express.static(path.join(__dirname, './built')));
+	app.use('/', Express.static(path.join(__dirname, './')));
 
 	// Serve normal requests with our handleRender function
 	app.use('/static', Express.static(path.join(__dirname, './static')));
