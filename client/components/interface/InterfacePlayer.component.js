@@ -121,7 +121,9 @@ class InterfacePlayer extends React.Component {
 				transition: '1s background'
 			}}>
 				<div style={{ float: 'left', padding: '20px 0 0 20px', width: 'calc(40% - 20px)' }}>
-					<p style={{ margin: '0 0 10px 0' }}>{ player.name }</p>
+					<a href={ `http://sokker.org/search?sch_ID_human=&sch_fname_human=${player.name.split(' ')[0]}&sch_name_human=${player.name.split(' ')[1]}` }>
+						<p style={{ margin: '0 0 10px 0' }}>{ player.name }</p>
+					</a>
 					<p>age { Math.round(player.age * 100) }</p>
 
 					<div style={{ fontSize: '12px', margin: '35px 0 0 0' }}>
