@@ -60,7 +60,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "bc664f4adbc4e26c4411"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "4dc4316a047e92a04f6a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
@@ -77176,9 +77176,13 @@ var InterfacePlayer = (0, _mobxReact.observer)(_class = (_class2 = function (_Re
 					'div',
 					{ style: { float: 'left', padding: '20px 0 0 20px', width: 'calc(40% - 20px)' } },
 					React.createElement(
-						'p',
-						{ style: { margin: '0 0 10px 0' } },
-						player.name
+						'a',
+						{ href: 'http://sokker.org/search?sch_ID_human=&sch_fname_human=' + player.name.split(' ')[0] + '&sch_name_human=' + player.name.split(' ')[1] },
+						React.createElement(
+							'p',
+							{ style: { margin: '0 0 10px 0' } },
+							player.name
+						)
 					),
 					React.createElement(
 						'p',
