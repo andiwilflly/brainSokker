@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const fs = require('fs');
 const path = require('path');
 const Express = require('express');
+var cors = require('cors');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 
 
@@ -12,6 +13,8 @@ const saveInterfacePlayerData = require('./server/routes/save_interface_player_d
 
 
 const app = Express();
+
+app.use(cors());
 
 // Serve built files with express static files middleware
 app.use('/built', Express.static(path.join(__dirname, './built')));
