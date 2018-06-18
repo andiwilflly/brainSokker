@@ -35,7 +35,7 @@ function currentTransfers(DB, req, res) {
 								$players.forEach((item)=> {
 									const $player = $(item);
 
-									const id = $player.find("div").first().text().trim();
+									const id = $player.find("#playerCell").find("div").first().text().trim();
 
 									const skills = $player.find('.table.table-condensed.table-skills td')
 										.text().trim().split('\n');
