@@ -32,6 +32,12 @@ const MongoClient = require('mongodb').MongoClient;
 // mongodb://andiwillfly:ward121314@ds127854.mlab.com:27854/net
 MongoClient.connect("mongodb://andiwillfly:ward121314@ds127854.mlab.com:27854/net", function (err, DB) {
 
+	app.use(function(req, res, next) {
+		res.header("Access-Control-Allow-Origin", "*");
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		next();
+	});
+
 	app.use('/interface_players', (req, res)=> interfacePlayersRoute(DB, req, res) );
 
 	app.use('/current_transfers', (req, res)=> currentTransfers(DB, req, res) );
