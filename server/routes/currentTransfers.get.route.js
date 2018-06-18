@@ -35,6 +35,8 @@ function currentTransfers(DB, req, res) {
 								$players.forEach((item)=> {
 									const $player = $(item);
 
+									const id = $player.find("div").first().text().trim();
+
 									const skills = $player.find('.table.table-condensed.table-skills td')
 										.text().trim().split('\n');
 
@@ -50,7 +52,7 @@ function currentTransfers(DB, req, res) {
 									const striker = +skills[7].split('[')[1].split(']')[0] / 100;
 
 									DATA.push({
-										name, age, stamina, keeper, pace, defender, technique, playmaker, passing, striker
+										id, name, age, stamina, keeper, pace, defender, technique, playmaker, passing, striker
 									});
 								});
 								return DATA;
