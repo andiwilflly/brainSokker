@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Express = require('express');
 const React = require('react');
+var cors = require('cors');
 const interfacePlayersRoute = require('./server/routes/interface_players.get.route');
 const currentTransfers = require('./server/routes/currentTransfers.get.route');
 const saveInterfacePlayerData = require('./server/routes/save_interface_player_data.post.route');
@@ -13,6 +14,15 @@ MongoClient.connect("mongodb://andiwillfly:ward121314@ds127854.mlab.com:27854/ne
 	if(err) throw err;
 
 	const app = Express();
+
+	app.use(cors());
+
+	app.use(function(req, res, next) {
+		res.header("Access-Control-Allow-Origin", "*");
+		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+		next();
+	});
+
 	// Serve built files with express static files middleware
 	app.use('/', Express.static(path.join(__dirname, './')));
 
