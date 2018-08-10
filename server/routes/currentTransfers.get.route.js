@@ -23,7 +23,7 @@ function currentTransfers(DB, req, res) {
 		if(response.statusCode === 302 && response.headers && response.headers.location) {
 			let promisePlayersDataArray = [];
 
-			for(let page in Array.from({ length: 4 }, (v, k) => k)) {
+			for(let page in Array.from({ length: 7 }, (v, k) => k)) {
 				promisePlayersDataArray.push(new Promise((resolve, reject)=> {
 
 					request(`http://sokker.org/transferSearch/pg/${page+1}`, (error, response, body)=> {
