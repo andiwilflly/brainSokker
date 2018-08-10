@@ -37,6 +37,8 @@ function currentTransfers(DB, req, res) {
 
 									const id = $player.find("#playerCell").find("div").first().text().trim();
 
+									const details = $player.find('.col-md-6.col-sm-5.col-xs-12.small').find('string').text().trim();
+
 									const skills = $player.find('.table.table-condensed.table-skills td')
 										.text().trim().split('\n');
 
@@ -52,7 +54,7 @@ function currentTransfers(DB, req, res) {
 									const striker = +skills[7].split('[')[1].split(']')[0] / 100;
 
 									DATA.push({
-										id, name, age, stamina, keeper, pace, defender, technique, playmaker, passing, striker
+										id, name, age, stamina, keeper, pace, defender, technique, playmaker, passing, striker, details
 									});
 								});
 								return DATA;
