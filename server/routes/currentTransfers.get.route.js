@@ -37,7 +37,7 @@ function currentTransfers(DB, req, res) {
 
 									const id = $player.find("#playerCell").find("div").first().text().trim();
 
-									const details = $player.find('.col-md-6.col-sm-5.col-xs-12.small').find("strng").html().split("<br>")[0];
+									const details = $($player.find('.col-md-6.col-sm-5.col-xs-12.small').find("strng").html().split("<br>")[0]).text().trim();
 									const endOfTrade = $($player.find('.col-md-6.col-sm-5.col-xs-12.small').find("strng").find("strong")[2]).text().trim();
 
 									const skills = $player.find('.table.table-condensed.table-skills td')
